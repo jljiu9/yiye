@@ -370,14 +370,14 @@ serve(async (req: Request) => {
         // cl(pathname)
         if (pathname == "/") {
             cl('访问主页！')
-            return readFile("index.html")
+            return readFile("./index.html")
         }
         if (pathname.startsWith('/assets')) {
             cl(pathname)
-            return readFile(pathname)
+            return readFile('.'+pathname)
         }
         else{
-            return readFile("index.html")
+            return readFile("./index.html")
         }
         if (pathname == '/yiye_usershare') {
             cl('访问主页！')
