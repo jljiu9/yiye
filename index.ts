@@ -373,6 +373,7 @@ serve(async (req: Request) => {
             return readFile("index.html")
         }
         if (pathname.startsWith('/assets')) {
+            cl(pathname)
             return readFile(pathname)
         }
         else{
