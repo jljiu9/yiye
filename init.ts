@@ -66,24 +66,28 @@ let getFolderSize =async (user_cookie:string,path:string) => {
         size: 0,
         number: 0
     }
-    let vv = Object.keys(list).map(async (xx) => {
-        if (mime.getType(list[xx].name)) {
-            let size: any = decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val())
-            if (size.includes(' ')) size = unFormatFileSize(size)
-            info.size = info.size + size
-            info.number++
-        }
-        if (typeof (list[xx]) == 'string' && mime.getType(list[xx])) {
-            let size: any = decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val())
-            if (size.includes(' ')) size = unFormatFileSize(size)
-            info.size = info.size + size
-            info.number++
-        } else {
-
-        }
-    })
-    await Promise.all(vv)
-    info.size = formatFileSize(info.size)
+    try {
+        let vv = Object.keys(list).map(async (xx) => {
+            if (mime.getType(list[xx].name)) {
+                let size: any = decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val())
+                if (size.includes(' ')) size = unFormatFileSize(size)
+                info.size = info.size + size
+                info.number++
+            }
+            if (typeof (list[xx]) == 'string' && mime.getType(list[xx])) {
+                let size: any = decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val())
+                if (size.includes(' ')) size = unFormatFileSize(size)
+                info.size = info.size + size
+                info.number++
+            } else {
+    
+            }
+        })
+        await Promise.all(vv)
+        info.size = formatFileSize(info.size)
+    } catch (error) {
+        console.log(error)
+    }
     
     return info
 }

@@ -203,6 +203,7 @@ serve(async (req: Request) => {
                 }
             })
             let zz = await Promise.all(vv)
+            cl(zz)
             return new Response(JSON.stringify(zz), {
                 status: 200,
                 headers: {
