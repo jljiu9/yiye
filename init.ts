@@ -3,7 +3,7 @@ import { mime } from "https://deno.land/x/mimetypes@v1.0.0/mod.ts";
 import { v4 as uuid4 } from 'https://esm.sh/uuid@9.0.0'
 import { db as DB } from "https://deno.land/x/jljiu@v1.0.01/mod.ts";
 import { ref, child, get, set } from "https://esm.sh/firebase@9.14.0/database"
-import { db } from "../updateDB.ts";
+import { db } from "./updateDB.ts";
 let notionInfo = {
     id: 'a6315f71-8197-41af-8854-96a33bc0b155',
     spaceId: '993c3a7f-e1f7-4342-974a-f8abf65c40d7',
