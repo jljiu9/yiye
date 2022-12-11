@@ -368,15 +368,15 @@ serve(async (req: Request) => {
     } else {
         // get请求
         // cl(pathname)
-        if (pathname == "/" || pathname == '/') {
+        if (pathname == "/") {
             cl('访问主页！')
-            return readFile("server/index.html")
+            return readFile("index.html")
         }
-        if (pathname.startsWith('/assets') || pathname.startsWith('/src')) {
-            return readFile(pathname.replace('/', 'server/'))
+        if (pathname.startsWith('/assets')) {
+            return readFile(pathname)
         }
         else{
-            return readFile("server/index.html")
+            return readFile("index.html")
         }
         if (pathname == '/yiye_usershare') {
             cl('访问主页！')
