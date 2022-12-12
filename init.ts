@@ -68,13 +68,13 @@ let getFolderSize =async (user_cookie:string,path:string) => {
     }
     try {
         let vv = Object.keys(list).map(async (xx) => {
-            if (mime.getType(list[xx].name)) {
+            if (list[xx].name) {
                 let size: any = decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val())
                 if (size.includes(' ')) size = unFormatFileSize(size)
                 info.size = info.size + size
                 info.number++
             }
-            if (typeof (list[xx]) == 'string' && mime.getType(list[xx])) {
+            if (typeof (list[xx]) == 'string' && list[xx] !== '0' && mime.getType(list[xx])) {
                 let size: any = decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val())
                 if (size.includes(' ')) size = unFormatFileSize(size)
                 info.size = info.size + size
