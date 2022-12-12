@@ -193,6 +193,7 @@ serve(async (req: Request) => {
                         cl('没有计算过文件大小！')
                         cl(decodeURI(data.path)+ '/' + decodeURI(xx))
                         let folder = await getFolderSize(user_cookie, decodeURI(data.path)+ '/' + decodeURI(xx))
+                        if (!folder.number) folder = await getFolderSize(user_cookie, encodeURI(decodeURI(data.path))+ '/' + encodeURI(decodeURI(xx)))
                         let folderInfo = {
                             name: decodeURI(xx),
                             type: 'folder',
