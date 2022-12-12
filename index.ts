@@ -178,6 +178,8 @@ serve(async (req: Request) => {
                     }
                 } else {
                     let cc = data.path.replaceAll('/', `\\`)
+                    if (cc == '\\') cc = ''
+                    cl(cc)
                     let f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + cc + '\\' + xx))).val()
                     if (!f) f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + encodeURI(cc) + '\\' + encodeURI(xx)))).val()
                     // console.log('jsave/users/' + user_cookie + '/folders/' + cc + '\\' + xx)
@@ -194,9 +196,9 @@ serve(async (req: Request) => {
                         // cl(decodeURI(data.path)+ '/' + decodeURI(xx))
                         // cl(encodeURI(decodeURI(data.path))+ '/' + encodeURI(decodeURI(xx)))
                         let folder = await getFolderSize(user_cookie, decodeURI(data.path) + '/' + decodeURI(xx))
-                        cl(folder)
+                        // cl(folder)
                         if (!folder) folder = await getFolderSize(user_cookie, encodeURI(decodeURI(data.path)) + '/' + encodeURI(decodeURI(xx)))
-                        cl(folder)
+                        // cl(folder)
                         let folderInfo = {
                             name: decodeURI(xx),
                             type: 'folder',
