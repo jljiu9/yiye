@@ -65,7 +65,8 @@ let getFolderSize =async (user_cookie:string,path:string) => {
     // list = JSON.parse(JSON.stringify(list))
     cl('list:')
     cl(list)
-    if (!list) return
+    if (list == null) return
+    cl('没有返回！成功！')
     let info:any = {
         size: 0,
         number: 0
