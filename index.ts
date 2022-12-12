@@ -203,7 +203,7 @@ serve(async (req: Request) => {
                             size: folder.size,
                             number: folder.number
                         }
-                        await set(ref(db, 'jsave/users/' + user_cookie + '/folders/' + data.path.replaceAll('/', `\\`) + '\\' + xx), folderInfo)
+                        set(ref(db, 'jsave/users/' + user_cookie + '/folders/' + data.path.replaceAll('/', `\\`) + '\\' + xx), folderInfo)
                         return folderInfo
                     }
                 }
