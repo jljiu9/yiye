@@ -24,7 +24,7 @@ let getRtnRedirect = async (url: RequestInfo, header?: any): Promise<any> => {
         method: 'get',
         headers: header
     });
-    return cl(res.url)
+    return res.url
 }
 let setObjOfUrlSearchParams = (obj: { [x: string]: any }, url: URL) => {
     Object.keys(obj).map(x => {
@@ -68,7 +68,7 @@ let getFolderSize =async (user_cookie:string,path:string) => {
     }
     try {
         let vv = Object.keys(list).map(async (xx) => {
-            cl(list[xx].name)
+            cl(list[xx])
             if (list[xx].name) {
                 cl('isobj')
                 let size: any = decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val())
