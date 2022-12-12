@@ -177,8 +177,10 @@ serve(async (req: Request) => {
                         time:list[xx].time
                     }
                 } else {
-                    let f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + data.path.replaceAll('/', `\\`) + '\\' + xx))).val()
-                    console.log('jsave/users/' + user_cookie + '/folders/' + data.path.replaceAll('/', `\\`) + '\\' + xx)
+                    let cc= data.path.replaceAll('/', `\\`)
+                    let f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + cc + '\\' + xx))).val()
+                    if (!f) f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + encodeURI(cc) + '\\' + encodeURI(xx)))).val()
+                    console.log('jsave/users/' + user_cookie + '/folders/' + cc + '\\' + xx)
                     console.log(f)
                     if (f && f.size) {
                         return {
