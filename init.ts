@@ -61,6 +61,7 @@ const unFormatFileSize = (size: string) => {
 
 let getFolderSize =async (user_cookie:string,path:string) => {
     let list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path))).val()
+    cl('list:')
     cl(list)
     let info:any = {
         size: 0,
@@ -68,7 +69,8 @@ let getFolderSize =async (user_cookie:string,path:string) => {
     }
     try {
         let vv = Object.keys(list).map(async (xx) => {
-            cl(xx)
+            cl('子目录')
+            cl(list[xx])
             if (list[xx].name) {
                 cl('isobj')
                 let size: any = decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val())
