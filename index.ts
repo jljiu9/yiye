@@ -33,14 +33,16 @@ let readFile = async (path: string) => {
 
 // 服务启动
 serve(async (req: Request) => {
-    let { pathname } = new URL(req.url)
+    let { pathname, searchParams } = new URL(req.url)
     let user_cookie: any
     // cl(pathname)
     // return new Response('xxx', { status: 200 ,headers:{
     //     'Access-Control-Allow-Origin': '*',
     //     'Access-Control-Allow-Headers': '*',
     // }})
+
     if (req.method == 'POST') {
+
         let data = JSON.parse(await req.text())
         // cl(data)
         if (pathname == '/api/resign') {
@@ -114,6 +116,7 @@ serve(async (req: Request) => {
         user_cookie = req.headers.get('Cookie')?.split('; ')
         user_cookie = decodeURI(user_cookie.find((x: string) => x.split('=')[0] == 'uname')?.split('=')[1])
         // user_cookie = '中文名'
+
         cl(user_cookie)
         if (!user_cookie) return new Response('请登入！', { status: 500, })
         if (pathname == '/api/upload') {
@@ -128,19 +131,54 @@ serve(async (req: Request) => {
         if (pathname == '/api/getUserFiles') {
             cl(pathname)
             let list: any
-            list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + data.path))).val()
-            if (!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(data.path)))).val()
-            if (!list) {
-                return new Response(JSON.stringify({ wrong: 0 }), {
-                    status: 200, headers: {
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Headers': '*',
-                    }
-                })
+            let user = decodeURI(searchParams.get('ref') as string)
+            if (searchParams.has('usershare') && searchParams.has('ref')) {
+                
+                let path = decodeURI(searchParams.get('usershare') as string)
+                let list = (await get(ref(db, 'jsave/users/' + user + '/share/' + path))).val()
+            } else {
+                list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + data.path))).val()
+                if (!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(data.path)))).val()
+                if (!list) {
+                    return new Response(JSON.stringify({ wrong: 0 }), {
+                        status: 200, headers: {
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Headers': '*',
+                        }
+                    })
+                }
             }
+
             let vv = Object.keys(list).map(async (xx) => {
                 let url = (await get(ref(db, 'jsave/files/' + xx + '/source'))).val()
-
+                if(list[xx].type == 'folder') {
+                    if (data.path == '/') {
+                        data.path = ''
+                    }else{
+                        data.path = data.path.replaceAll('/','\\')
+                    }
+                    let f = (await get(ref(db, 'jsave/users/' + user + '/folders/' + list[xx].path+ data.path))).val()
+                    if (!f) f = (await get(ref(db, 'jsave/users/' + user + '/folders/' + encodeURI(list[xx].path)+ encodeURI(data.path)))).val()
+                    if (f && f.size) {
+                        return {
+                            name: decodeURI(xx),
+                            type: 'folder',
+                            size: f.size,
+                            number: f.number
+                        }
+                    } else {
+                        let folder = await getFolderSize(user, list[xx].path + data.path)
+                        if (!folder) folder = await getFolderSize(user, encodeURI(list[xx].path) +encodeURI(data.path))
+                        let folderInfo = {
+                            name: decodeURI(xx),
+                            type: 'folder',
+                            size: folder.size,
+                            number: folder.number
+                        }
+                        set(ref(db, 'jsave/users/' + user + '/folders/' + list[xx].path), folderInfo)
+                        return folderInfo
+                    }
+                }
                 if (typeof (list[xx]) == 'string' && mime.getType(list[xx])) {
                     console.log('string')
                     let type
@@ -179,7 +217,7 @@ serve(async (req: Request) => {
                 } else {
                     let cc = data.path.replaceAll('/', `\\`)
                     if (cc == '\\') cc = ''
-                    cl(cc)
+                    // cl(cc)
                     let f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + cc + '\\' + xx))).val()
                     if (!f) f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + encodeURI(cc) + '\\' + encodeURI(xx)))).val()
                     // console.log('jsave/users/' + user_cookie + '/folders/' + cc + '\\' + xx)
@@ -313,7 +351,8 @@ serve(async (req: Request) => {
                         path: data.path,
                         name: data.name,
                         type: 'folder',
-                        user: data.user
+                        user: data.user,
+                        time: data.time
                     })
                 } else {
                     await set(ref(db, 'jsave/users/' + user_cookie + '/share/' + uuid + '/' + data.md5), {
@@ -321,7 +360,8 @@ serve(async (req: Request) => {
                         path: data.path,
                         name: data.name,
                         type: data.type,
-                        user: data.user
+                        user: data.user,
+                        time: data.time
                     })
                 }
             })
