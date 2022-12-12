@@ -62,9 +62,10 @@ const unFormatFileSize = (size: string) => {
 let getFolderSize =async (user_cookie:string,path:string) => {
     let list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path))).val()
     
-    list = JSON.parse(JSON.stringify(list))
+    // list = JSON.parse(JSON.stringify(list))
     cl('list:')
     cl(list)
+    if (!list) return
     let info:any = {
         size: 0,
         number: 0
