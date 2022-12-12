@@ -63,18 +63,18 @@ let getFolderSize =async (user_cookie:string,path:string) => {
     let list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path))).val()
     
     // list = JSON.parse(JSON.stringify(list))
-    cl('list:')
-    cl(list)
+    // cl('list:')
+    // cl(list)
     if (list == null) return
-    cl('没有返回！成功！')
+    // cl('没有返回！成功！')
     let info:any = {
         size: 0,
         number: 0
     }
     try {
         let vv = Object.keys(list).map(async (xx) => {
-            cl('子目录')
-            cl(list[xx])
+            // cl('子目录')
+            // cl(list[xx])
             if (list[xx].name) {
                 cl('isobj')
                 let size: any = decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val())

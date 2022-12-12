@@ -127,9 +127,9 @@ serve(async (req: Request) => {
         // cl(pathname)
         if (pathname == '/api/getUserFiles') {
             cl(pathname)
-            let list:any
+            let list: any
             list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + data.path))).val()
-            if(!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(data.path)))).val()
+            if (!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(data.path)))).val()
             if (!list) {
                 return new Response(JSON.stringify({ wrong: 0 }), {
                     status: 200, headers: {
@@ -174,14 +174,14 @@ serve(async (req: Request) => {
                         type: type,
                         size: decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val()),
                         md5: xx,
-                        time:list[xx].time
+                        time: list[xx].time
                     }
                 } else {
-                    let cc= data.path.replaceAll('/', `\\`)
+                    let cc = data.path.replaceAll('/', `\\`)
                     let f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + cc + '\\' + xx))).val()
                     if (!f) f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + encodeURI(cc) + '\\' + encodeURI(xx)))).val()
-                    console.log('jsave/users/' + user_cookie + '/folders/' + cc + '\\' + xx)
-                    console.log(f)
+                    // console.log('jsave/users/' + user_cookie + '/folders/' + cc + '\\' + xx)
+                    // console.log(f)
                     if (f && f.size) {
                         return {
                             name: decodeURI(xx),
@@ -191,12 +191,12 @@ serve(async (req: Request) => {
                         }
                     } else {
                         cl('没有计算过文件大小！')
-                        cl(decodeURI(data.path)+ '/' + decodeURI(xx))
-                        cl(encodeURI(decodeURI(data.path))+ '/' + encodeURI(decodeURI(xx)))
-                        let folder = await getFolderSize(user_cookie, decodeURI(data.path)+ '/' + decodeURI(xx))
-                        cl(folder)
-                        if (!folder) folder = await getFolderSize(user_cookie, encodeURI(decodeURI(data.path))+ '/' + encodeURI(decodeURI(xx)))
-                        cl(folder)
+                        // cl(decodeURI(data.path)+ '/' + decodeURI(xx))
+                        // cl(encodeURI(decodeURI(data.path))+ '/' + encodeURI(decodeURI(xx)))
+                        let folder = await getFolderSize(user_cookie, decodeURI(data.path) + '/' + decodeURI(xx))
+                        // cl(folder)
+                        if (!folder) folder = await getFolderSize(user_cookie, encodeURI(decodeURI(data.path)) + '/' + encodeURI(decodeURI(xx)))
+                        // cl(folder)
                         let folderInfo = {
                             name: decodeURI(xx),
                             type: 'folder',
@@ -209,7 +209,7 @@ serve(async (req: Request) => {
                 }
             })
             let zz = await Promise.all(vv)
-            cl(zz)
+            // cl(zz)
             return new Response(JSON.stringify(zz), {
                 status: 200,
                 headers: {
@@ -231,12 +231,12 @@ serve(async (req: Request) => {
             } else {
                 // let path = data.path.replaceAll('\\', `/`)
                 await set(ref(db, 'jsave/users/' + user_cookie + '/tree' + data.path + '/' + data.md5), {
-                    name:data.name,
-                    time:data.time
+                    name: data.name,
+                    time: data.time
                 })
                 await set(ref(db, 'jsave/users/' + user_cookie + '/files/' + data.md5), {
-                    name:data.name,
-                    time:data.time
+                    name: data.name,
+                    time: data.time
                 })
                 // let info = {
                 //     size:0,
@@ -248,7 +248,7 @@ serve(async (req: Request) => {
                 let folder = await getFolderSize(user_cookie, data.path)
                 cl(data.path)
                 cl(folder)
-                await set(ref(db, 'jsave/users/' + user_cookie + '/folders/' + data.path.replaceAll('/','\\')), {
+                await set(ref(db, 'jsave/users/' + user_cookie + '/folders/' + data.path.replaceAll('/', '\\')), {
                     name: data.path.split('/')[data.path.split('/').length - 1],
                     size: folder.size,
                     number: folder.number,
@@ -266,8 +266,8 @@ serve(async (req: Request) => {
         }
         if (pathname.endsWith('/api/setpreview')) {
             // await set(ref(db, 'jsave/files/' + data.id), null)
-            await set(ref(db, 'jsave/users/' + user_cookie + '/tree' + data.path.replaceAll('\\', `/`) + '/' + data.md5+'/preview'), data.preview)
-            await set(ref(db, 'jsave/users/' + user_cookie + '/files/' + data.md5+'/preview'), data.preview)
+            await set(ref(db, 'jsave/users/' + user_cookie + '/tree' + data.path.replaceAll('\\', `/`) + '/' + data.md5 + '/preview'), data.preview)
+            await set(ref(db, 'jsave/users/' + user_cookie + '/files/' + data.md5 + '/preview'), data.preview)
             return new Response(JSON.stringify({ preview: true }), {
                 status: 200,
                 headers: {
@@ -277,11 +277,23 @@ serve(async (req: Request) => {
             })
 
         }
+        if (pathname.endsWith('/api/rename')) {
+            await set(ref(db, 'jsave/users/' + user_cookie + '/tree' + data.path + '/' + data.md5 + '/name'), data.name)
+            await set(ref(db, 'jsave/users/' + user_cookie + '/tree' + data.path + '/' + data.md5 + '/time'), data.time)
+            return new Response(JSON.stringify({ rename: true }), {
+                status: 200,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': '*',
+                }
+            })
+        }
         if (pathname.endsWith('/api/setlove')) {
             await set(ref(db, 'jsave/users/' + user_cookie + '/love/' + data.md5), {
                 path: data.path,
                 name: data.name,
-                preview: data.preview
+                preview: data.preview,
+                time: data.time
             })
             return new Response(JSON.stringify({ love: true }), {
                 status: 200,
@@ -329,16 +341,16 @@ serve(async (req: Request) => {
                 await set(ref(db, 'jsave/files/' + data.md5 + '/md5'), data.md5)
                 await set(ref(db, 'jsave/files/' + data.id), null)
                 await set(ref(db, 'jsave/users/' + user_cookie + '/tree' + data.path.replaceAll('\\', `/`) + '/' + data.md5), {
-                    name:data.name,
-                    time:data.time
+                    name: data.name,
+                    time: data.time
                 })
                 await set(ref(db, 'jsave/users/' + user_cookie + '/files/' + data.md5), {
-                    name:data.name,
-                    time:data.time
+                    name: data.name,
+                    time: data.time
                 })
                 cl(data.path)
                 let folder = await getFolderSize(user_cookie, data.path.replaceAll('\\', `/`))
-                
+
                 cl(folder)
                 await set(ref(db, 'jsave/users/' + user_cookie + '/folders/' + data.path), {
                     name: data.path.split('/')[data.path.split('/').length - 1],
@@ -346,7 +358,7 @@ serve(async (req: Request) => {
                     number: folder.number,
                     type: 'folder'
                 })
-                
+
                 return new Response(JSON.stringify({ success: 1 }), {
                     status: 200,
                     headers: {
@@ -381,9 +393,9 @@ serve(async (req: Request) => {
         }
         if (pathname.startsWith('/assets')) {
             cl(pathname)
-            return readFile('.'+pathname)
+            return readFile('.' + pathname)
         }
-        else{
+        else {
             return readFile("./index.html")
         }
         if (pathname == '/yiye_usershare') {
