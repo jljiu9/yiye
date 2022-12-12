@@ -194,7 +194,9 @@ serve(async (req: Request) => {
                         cl(decodeURI(data.path)+ '/' + decodeURI(xx))
                         cl(encodeURI(decodeURI(data.path))+ '/' + encodeURI(decodeURI(xx)))
                         let folder = await getFolderSize(user_cookie, decodeURI(data.path)+ '/' + decodeURI(xx))
+                        cl(folder)
                         if (!folder.number) folder = await getFolderSize(user_cookie, encodeURI(decodeURI(data.path))+ '/' + encodeURI(decodeURI(xx)))
+                        cl(folder)
                         let folderInfo = {
                             name: decodeURI(xx),
                             type: 'folder',
