@@ -68,7 +68,7 @@ let getFolderSize =async (user_cookie:string,path:string) => {
     }
     try {
         let vv = Object.keys(list).map(async (xx) => {
-            cl(list[xx])
+            cl(xx)
             if (list[xx].name) {
                 cl('isobj')
                 let size: any = decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val())
