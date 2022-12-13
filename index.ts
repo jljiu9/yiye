@@ -147,9 +147,12 @@ serve(async (req: Request) => {
                     }else{
                         path = path.replaceAll('\\','/')
                         path = path.split('/')
+                        cl(path)
                         path.pop()
+                        cl(path)
                         path.join('/')
-                        path = '/'+path.replace(',','')+data.path
+                        cl(path)
+                        path = '/'+path+data.path
                         console.log('path',path)
                     }
                     console.log('path',path)
