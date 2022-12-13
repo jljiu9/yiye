@@ -147,7 +147,9 @@ serve(async (req: Request) => {
                         data.path = data.path.replaceAll('/','\\')
                     }
                     let f = (await get(ref(db, 'jsave/users/' + user + '/folders/' + list[xx].path+ data.path))).val()
+                    cl(f)
                     if (!f) f = (await get(ref(db, 'jsave/users/' + user + '/folders/' + encodeURI(list[xx].path)+ encodeURI(data.path)))).val()
+                    cl(f)
                     if (f && f.size) {
                         return {
                             name: decodeURI(xx),
@@ -157,7 +159,9 @@ serve(async (req: Request) => {
                         }
                     } else {
                         let folder = await getFolderSize(user, list[xx].path + data.path)
+                        cl(folder)
                         if (!folder) folder = await getFolderSize(user, encodeURI(list[xx].path) +encodeURI(data.path))
+                        cl(folder)
                         let folderInfo = {
                             name: decodeURI(xx),
                             type: 'folder',
