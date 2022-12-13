@@ -128,7 +128,9 @@ serve(async (req: Request) => {
                 user = decodeURI(searchParams.get('ref') as string)
                 let path = decodeURI(searchParams.get('usershare') as string)
                 list = (await get(ref(db, 'jsave/users/' + user + '/share/' + path))).val()
+                cl(list)
                 if (data.path !== '/') {
+                    cl(data.path)
                     let path:any = ''
                     Object.keys(list).map(xx=>{
                         if (list[xx].type == 'folder'){
