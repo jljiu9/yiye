@@ -134,8 +134,10 @@ serve(async (req: Request) => {
                     let path:any = ''
                     Object.keys(list).map(xx=>{
                         if (list[xx].type == 'folder'){
-                            if(list[xx].path.endsWith(data.path)){
+                            cl(list[xx])
+                            if(list[xx].path.endsWith((data.path).replaceAll('/','\\'))){
                                 path = list[xx].path
+                                cl(path)
                             }
                         }
                     })
