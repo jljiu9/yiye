@@ -151,6 +151,8 @@ serve(async (req: Request) => {
                     console.log('f',f)
                     if (!f) f = (await get(ref(db, 'jsave/users/' + user + '/folders/' + encodeURI(list[xx].path)+ encodeURI(data.path)))).val()
                     console.log('f',f)
+                    console.log('list[xx].path',list[xx].path)
+                    console.log('list[xx]',list[xx])
                     console.log('path','jsave/users/' + user + '/folders/' + list[xx].path+ data.path)
                     if (f && f.size) {
                         return {
