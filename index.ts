@@ -139,6 +139,7 @@ serve(async (req: Request) => {
                             }
                         }
                     })
+                    console.log('>>',path)
                     if (path == '\\') {
                         path = data.path
                     }else{
