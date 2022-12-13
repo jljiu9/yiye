@@ -36,10 +36,6 @@ serve(async (req: Request) => {
     let { pathname, searchParams } = new URL(req.url)
     let user_cookie: any
     // cl(pathname)
-    // return new Response('xxx', { status: 200 ,headers:{
-    //     'Access-Control-Allow-Origin': '*',
-    //     'Access-Control-Allow-Headers': '*',
-    // }})
 
     if (req.method == 'POST') {
 
@@ -86,7 +82,7 @@ serve(async (req: Request) => {
             })
         }
         if (pathname == '/api/login') {
-            cl('>>')
+            cl('登入')
             if (data.name && data.passward) {
                 if (await ifUser(data.name)) {
                     let pws = (await get(ref(db, 'jsave/users/' + data.name + '/passward'))).val()
@@ -121,30 +117,23 @@ serve(async (req: Request) => {
         if (!user_cookie) return new Response('请登入！', { status: 500, })
         if (pathname == '/api/upload') {
             return new Response(await upload(data, writeDB), {
-                status: 200, headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Headers': '*',
-                }
+                status: 200
             })
         }
         // cl(pathname)
         if (pathname == '/api/getUserFiles') {
             cl(pathname)
-            let list: any
-            let user = decodeURI(searchParams.get('ref') as string)
+            let list: any,user: any
             if (searchParams.has('usershare') && searchParams.has('ref')) {
-                
+                user = decodeURI(searchParams.get('ref') as string)
                 let path = decodeURI(searchParams.get('usershare') as string)
-                let list = (await get(ref(db, 'jsave/users/' + user + '/share/' + path))).val()
+                list = (await get(ref(db, 'jsave/users/' + user + '/share/' + path))).val()
             } else {
                 list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + data.path))).val()
                 if (!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(data.path)))).val()
                 if (!list) {
                     return new Response(JSON.stringify({ wrong: 0 }), {
-                        status: 200, headers: {
-                            'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Headers': '*',
-                        }
+                        status: 200
                     })
                 }
             }
