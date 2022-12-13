@@ -141,15 +141,17 @@ serve(async (req: Request) => {
             let vv = Object.keys(list).map(async (xx) => {
                 let url = (await get(ref(db, 'jsave/files/' + xx + '/source'))).val()
                 if(list[xx].type == 'folder') {
+                    cl('分享的文件夹')
                     if (data.path == '/') {
                         data.path = ''
                     }else{
                         data.path = data.path.replaceAll('/','\\')
                     }
                     let f = (await get(ref(db, 'jsave/users/' + user + '/folders/' + list[xx].path+ data.path))).val()
-                    cl(f)
+                    console.log('f',f)
                     if (!f) f = (await get(ref(db, 'jsave/users/' + user + '/folders/' + encodeURI(list[xx].path)+ encodeURI(data.path)))).val()
-                    cl(f)
+                    console.log('f',f)
+                    console.log('path','jsave/users/' + user + '/folders/' + list[xx].path+ data.path)
                     if (f && f.size) {
                         return {
                             name: decodeURI(xx),
@@ -159,9 +161,9 @@ serve(async (req: Request) => {
                         }
                     } else {
                         let folder = await getFolderSize(user, list[xx].path + data.path)
-                        cl(folder)
+                        console.log('folder',folder)
                         if (!folder) folder = await getFolderSize(user, encodeURI(list[xx].path) +encodeURI(data.path))
-                        cl(folder)
+                        console.log('folder',folder)
                         let folderInfo = {
                             name: decodeURI(xx),
                             type: 'folder',
