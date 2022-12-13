@@ -150,9 +150,9 @@ serve(async (req: Request) => {
                         cl(path)
                         path.pop()
                         cl(path)
-                        path.join('/')
+                        path = path.join('/')
                         cl(path)
-                        path = '/'+path+data.path
+                        path = path+data.path
                         console.log('path',path)
                     }
                     console.log('path',path)
