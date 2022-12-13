@@ -130,7 +130,7 @@ serve(async (req: Request) => {
                 list = (await get(ref(db, 'jsave/users/' + user + '/share/' + path))).val()
                 cl(list)
                 if (data.path !== '/') {
-                    cl(data.path)
+                    console.log('data.path',data.path)
                     let path:any = ''
                     Object.keys(list).map(xx=>{
                         if (list[xx].type == 'folder'){
@@ -147,12 +147,13 @@ serve(async (req: Request) => {
                         path.pop()
                         path.join('/')
                         path = path+data.path
-                        cl(path)
+                        console.log('path',path)
                     }
+                    console.log('path',path)
                     list = (await get(ref(db, 'jsave/users/' + user + '/tree' +path))).val()
                     if (!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(path)))).val()
                     if (!list) {
-                        return new Response(JSON.stringify({ wrong: 0 }), {
+                        return new Response(JSON.stringify({ wrong: 0,usershare:true }), {
                             status: 200
                         })
                     }
