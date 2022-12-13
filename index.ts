@@ -128,34 +128,25 @@ serve(async (req: Request) => {
                 user = decodeURI(searchParams.get('ref') as string)
                 let path = decodeURI(searchParams.get('usershare') as string)
                 list = (await get(ref(db, 'jsave/users/' + user + '/share/' + path))).val()
-                cl(list)
                 if (data.path !== '/') {
                     console.log('data.path',data.path)
                     let path:any = ''
                     Object.keys(list).map(xx=>{
                         if (list[xx].type == 'folder'){
-                            cl(list[xx])
                             if(list[xx].path.endsWith((data.path).replaceAll('/','\\'))){
                                 path = list[xx].path
-                                cl(path)
                             }
                         }
                     })
-                    console.log('>>',path)
                     if (path == '\\') {
                         path = data.path
                     }else{
                         path = path.replaceAll('\\','/')
                         path = path.split('/')
-                        cl(path)
                         path.pop()
-                        cl(path)
                         path = path.join('/')
-                        cl(path)
                         path = path+data.path
-                        console.log('path',path)
                     }
-                    console.log('path',path)
                     list = (await get(ref(db, 'jsave/users/' + user + '/tree' +path))).val()
                     if (!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(path)))).val()
                     if (!list) {
@@ -213,7 +204,7 @@ serve(async (req: Request) => {
                     }
                 }
                 if (typeof (list[xx]) == 'string' && mime.getType(list[xx])) {
-                    console.log('string')
+                    // console.log('string')
                     let type
                     let mm = mime.getType(list[xx])?.split('/')[0]
                     if (mm !== 'video' && mm !== 'image') {
@@ -230,7 +221,7 @@ serve(async (req: Request) => {
                     }
                 }
                 if (list[xx].time && mime.getType(list[xx].name)) {
-                    console.log('obj')
+                    // console.log('obj')
                     let type
                     let mm = mime.getType(list[xx].name)?.split('/')[0]
                     if (mm !== 'video' && mm !== 'image') {
@@ -250,11 +241,8 @@ serve(async (req: Request) => {
                 } else {
                     let cc = data.path.replaceAll('/', `\\`)
                     if (cc == '\\') cc = ''
-                    // cl(cc)
                     let f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + cc + '\\' + xx))).val()
                     if (!f) f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + encodeURI(cc) + '\\' + encodeURI(xx)))).val()
-                    // console.log('jsave/users/' + user_cookie + '/folders/' + cc + '\\' + xx)
-                    // console.log(f)
                     if (f && f.size) {
                         return {
                             name: decodeURI(xx),
@@ -264,12 +252,8 @@ serve(async (req: Request) => {
                         }
                     } else {
                         cl('没有计算过文件大小！')
-                        // cl(decodeURI(data.path)+ '/' + decodeURI(xx))
-                        // cl(encodeURI(decodeURI(data.path))+ '/' + encodeURI(decodeURI(xx)))
                         let folder = await getFolderSize(user_cookie, decodeURI(data.path) + '/' + decodeURI(xx))
-                        // cl(folder)
                         if (!folder) folder = await getFolderSize(user_cookie, encodeURI(decodeURI(data.path)) + '/' + encodeURI(decodeURI(xx)))
-                        // cl(folder)
                         let folderInfo = {
                             name: decodeURI(xx),
                             type: 'folder',
@@ -282,7 +266,6 @@ serve(async (req: Request) => {
                 }
             })
             let zz = await Promise.all(vv)
-            // cl(zz)
             return new Response(JSON.stringify(zz), {
                 status: 200,
                 headers: {
