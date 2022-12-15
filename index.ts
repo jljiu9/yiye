@@ -112,18 +112,14 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 }
             })
         }
-        user_cookie = req.headers.get('Cookie')?.split('; ')
-        user_cookie = decodeURI(user_cookie.find((x: string) => x.split('=')[0] == 'uname')?.split('=')[1])
-        // user_cookie = '中文名'
+        // 获取用户名
+        try {
+            user_cookie = req.headers.get('Cookie')?.split('; ')
+            user_cookie = decodeURI(user_cookie.find((x: string) => x.split('=')[0] == 'uname')?.split('=')[1])
+        } catch (error) {
 
-        cl(user_cookie)
-        if (!user_cookie) return new Response('请登入！', { status: 500, })
-        if (pathname == '/api/upload') {
-            return new Response(await upload(data, writeDB), {
-                status: 200
-            })
         }
-        // cl(pathname)
+
         if (pathname == '/api/getUserFiles') {
             cl(pathname)
             let list: any, user: any
@@ -278,6 +274,14 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             })
         }
 
+        cl(user_cookie)
+        if (!user_cookie) return new Response('请登入！', { status: 500, })
+        if (pathname == '/api/upload') {
+            return new Response(await upload(data, writeDB), {
+                status: 200
+            })
+        }
+        
         if (pathname.endsWith('/api/checkmd5')) {
             if (!await ifMD5(data.md5)) {
                 return new Response(JSON.stringify({ exist: false }), {
