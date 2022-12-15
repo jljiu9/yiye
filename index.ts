@@ -1,5 +1,5 @@
 // deno-lint-ignore-file
-import { serve } from "https://deno.land/std@0.155.0/http/server.ts"
+import { serve, ConnInfo } from "https://deno.land/std@0.155.0/http/server.ts"
 import { ref, child, get, set } from "https://esm.sh/firebase@9.14.0/database"
 import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize } from "./init.ts";
 import { db } from "./updateDB.ts";
@@ -17,7 +17,7 @@ let ifMD5 = async (md5: string) => {
     let snapshot = await get(child(ref(db), 'jsave/files/' + md5))
     return snapshot.exists()
 }
-ref(db,)
+
 let ifFolder = async (user_cookie: string, path: string) => {
     return (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + path))).val()
 }
@@ -32,7 +32,10 @@ let readFile = async (path: string) => {
 }
 
 // 服务启动
-serve(async (req: Request) => {
+serve(async (req: Request, connInfo: ConnInfo) => {
+    const addr = connInfo.remoteAddr as Deno.NetAddr;
+    const ip = addr.hostname;
+    console.log(`访问者ip: ${ip}`)
     let { pathname, searchParams } = new URL(req.url)
     let user_cookie: any
     // cl(pathname)
@@ -129,28 +132,28 @@ serve(async (req: Request) => {
                 let path = decodeURI(searchParams.get('usershare') as string)
                 list = (await get(ref(db, 'jsave/users/' + user + '/share/' + path))).val()
                 if (data.path !== '/') {
-                    console.log('data.path',data.path)
-                    let path:any = ''
-                    Object.keys(list).map(xx=>{
-                        if (list[xx].type == 'folder'){
-                            if(list[xx].path.endsWith((data.path).replaceAll('/','\\'))){
+                    console.log('data.path', data.path)
+                    let path: any = ''
+                    Object.keys(list).map(xx => {
+                        if (list[xx].type == 'folder') {
+                            if (list[xx].path.endsWith((data.path).replaceAll('/', '\\'))) {
                                 path = list[xx].path
                             }
                         }
                     })
                     if (path == '\\') {
                         path = data.path
-                    }else{
-                        path = path.replaceAll('\\','/')
+                    } else {
+                        path = path.replaceAll('\\', '/')
                         path = path.split('/')
                         path.pop()
                         path = path.join('/')
-                        path = path+data.path
+                        path = path + data.path
                     }
-                    list = (await get(ref(db, 'jsave/users/' + user + '/tree' +path))).val()
+                    list = (await get(ref(db, 'jsave/users/' + user + '/tree' + path))).val()
                     if (!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(path)))).val()
                     if (!list) {
-                        return new Response(JSON.stringify({ wrong: 0,usershare:true }), {
+                        return new Response(JSON.stringify({ wrong: 0, usershare: true }), {
                             status: 200
                         })
                     }
@@ -214,7 +217,7 @@ serve(async (req: Request) => {
                     }
                     return {
                         name: list[xx],
-                        file: await tempUrl(url, list[xx]),
+                        file: '/jljiuspeed?md5=' + xx + '&name=' + list[xx],
                         type: type,
                         size: decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val()),
                         md5: xx
@@ -231,7 +234,7 @@ serve(async (req: Request) => {
                     }
                     return {
                         name: list[xx].name,
-                        file: await tempUrl(url, list[xx].name),
+                        file: '/jljiuspeed?md5=' + xx + '&name=' + list[xx].name,
                         preview: list[xx].preview ? await tempUrl(list[xx].preview, list[xx].name) : null,
                         type: type,
                         size: decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val()),
@@ -445,7 +448,28 @@ serve(async (req: Request) => {
         })
     } else {
         // get请求
-        // cl(pathname)
+        if (pathname.startsWith('/jljiuspeed')) {
+            if (searchParams.has('md5') && searchParams.has('name')) {
+                let md5 = searchParams.get('md5')
+                let name = decodeURI(searchParams.get('name') as string)
+                let url = (await get(ref(db, 'jsave/files/' + md5 + '/source'))).val()
+                const res = await fetch(await tempUrl(url, name), {
+                    headers: {
+                        'Connection': "keep-alive",
+                        "proxy-connection": "keep-alive",
+                        'Range': req.headers.get('Range') as string
+                    }
+                });
+                return new Response(res.body, {
+                    status: res.status,
+                    headers: res.headers,
+                });
+            } else {
+                return new Response(`<b>请输入 一叶|枫☁ 的正确加速地址</b>`, {
+                    headers: { "content-type": "text/html" },
+                });
+            }
+        }
         if (pathname == "/") {
             cl('访问主页！')
             return readFile("./index.html")
