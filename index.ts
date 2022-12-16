@@ -382,10 +382,12 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     cl(data)
                     cl(data.path == '/')
                     cl(data.path == '\\')
-                    if (data.path == '\\') {
+                    if (data.path == '/') {
+                        data.path = '\\'
                         cl('十足目录')
+                        cl(data.path)
                     }else{
-                        data.path = data.path + '\\' + data.name
+                        data.path = data.path.replaceAll('/','\\') + '\\' + data.name
                         cl(data.path)
                     }
                     await set(ref(db, 'jsave/users/' + user_cookie + '/share/' + uuid + '/' + data.name), {
