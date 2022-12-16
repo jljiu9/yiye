@@ -378,11 +378,11 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             let uuid = uuid4()
             data.map(async (data: any) => {
                 if (data.type == 'folder') {
-                    if (data.path == '/') {
-                        data.path == data.path.replaceAll('/', `\\`)
-                        cl(data.path)
+                    data.path == data.path.replaceAll('/', `\\`)
+                    if (data.path == '\\') {
+                        cl('十足目录')
                     }else{
-                        data.path = data.path.replaceAll('/', `\\`) + '\\' + data.name
+                        data.path = data.path + '\\' + data.name
                         cl(data.path)
                     }
                     await set(ref(db, 'jsave/users/' + user_cookie + '/share/' + uuid + '/' + data.name), {
