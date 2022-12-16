@@ -173,6 +173,11 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     } else {
                         data.path = data.path.replaceAll('/', '\\')
                     }
+                    if(list[xx].path== '/' && data.path == '') {
+                        list[xx].path = '\\'+data.name
+                        cl('hhhh')
+                        cl(list[xx].path)
+                    }
                     let f = (await get(ref(db, 'jsave/users/' + user + '/folders/' + list[xx].path + data.path))).val()
                     console.log('f', f)
                     if (!f) f = (await get(ref(db, 'jsave/users/' + user + '/folders/' + encodeURI(list[xx].path) + encodeURI(data.path)))).val()
@@ -379,7 +384,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             data.map(async (data: any) => {
                 if (data.type == 'folder') {
                     if (data.path == '/') {
-                        data.path == '\\'
+                        // data.path = '\\'
                         cl('zhuxxxxx')
                         cl(data.path)
                     }else{
