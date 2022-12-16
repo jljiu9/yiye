@@ -228,7 +228,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     } else {
                         type = mm
                     }
-                    if ( list[xx].preview && !list[xx].preview.include('/jljiuspeed?notionid=')) {
+                    if ( list[xx].preview && !list[xx].preview.includes('/jljiuspeed?notionid=')) {
                         list[xx].preview = '/jljiuspeed?notionid=' + list[xx].preview + '&name=' + list[xx].name
                     }else{
                         list[xx].preview  = null
