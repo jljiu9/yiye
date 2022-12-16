@@ -379,6 +379,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             data.map(async (data: any) => {
                 if (data.type == 'folder') {
                     data.path == data.path.replaceAll('/', `\\`)
+                    cl(data)
                     if (data.path == '\\') {
                         cl('十足目录')
                     }else{
