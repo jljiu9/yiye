@@ -385,10 +385,10 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         time: data.time
                     })
                 } else {
-                    cl(data.preview)
+                    cl(data.notionid)
                     await set(ref(db, 'jsave/users/' + user_cookie + '/share/' + uuid + '/' + data.md5), {
                         md5: data.md5,
-                        preview: data.preview,
+                        preview: data.notionid,
                         path: data.path,
                         name: data.name,
                         type: data.type,
