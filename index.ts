@@ -228,10 +228,15 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     } else {
                         type = mm
                     }
+                    if ( list[xx].preview && !list[xx].preview.include('/jljiuspeed?notionid=')) {
+                        list[xx].preview = '/jljiuspeed?notionid=' + list[xx].preview + '&name=' + list[xx].name
+                    }else{
+                        list[xx].preview  = null
+                    }
                     return {
                         name: list[xx].name,
                         file: '/jljiuspeed?md5=' + xx + '&name=' + list[xx].name,
-                        preview: list[xx].preview ? '/jljiuspeed?notionid=' + list[xx].preview + '&name=' + list[xx].name : null,
+                        preview: list[xx].preview ,
                         // preview: list[xx].preview ? await tempUrl(list[xx].preview, list[xx].name) : null,
                         type: type,
                         size: decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val()),
@@ -385,10 +390,10 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         time: data.time
                     })
                 } else {
-                    cl(data.notionid)
+                    cl(data.preview)
                     await set(ref(db, 'jsave/users/' + user_cookie + '/share/' + uuid + '/' + data.md5), {
                         md5: data.md5,
-                        preview: data.notionid,
+                        preview: data.preview,
                         path: data.path,
                         name: data.name,
                         type: data.type,
