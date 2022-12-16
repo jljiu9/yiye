@@ -378,8 +378,10 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             let uuid = uuid4()
             data.map(async (data: any) => {
                 if (data.type == 'folder') {
-                    data.path == data.path.replaceAll('/', `\\`)
+                    data.path == data.path.replaceAll('/','\\')
                     cl(data)
+                    cl(data.path == '/')
+                    cl(data.path == '\\')
                     if (data.path == '\\') {
                         cl('十足目录')
                     }else{
