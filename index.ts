@@ -379,7 +379,8 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             data.map(async (data: any) => {
                 if (data.type == 'folder') {
                     if (data.path == '/') {
-                        data.path == '\\'
+                        data.path == data.path.replaceAll('/', `\\`)
+                        cl(data.path)
                     }else{
                         data.path = data.path.replaceAll('/', `\\`) + '\\' + data.name
                         cl(data.path)
