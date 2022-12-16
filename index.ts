@@ -174,8 +174,8 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         data.path = data.path.replaceAll('/', '\\')
                     }
                     if(list[xx].path== '/' && data.path == '') {
-                        list[xx].path = '\\'+data.name
-                        cl('hhhh')
+                        list[xx].path = '\\'+list[xx].name
+                        cl(data.name)
                         cl(list[xx].path)
                     }
                     let f = (await get(ref(db, 'jsave/users/' + user + '/folders/' + list[xx].path + data.path))).val()
