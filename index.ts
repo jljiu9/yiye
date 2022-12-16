@@ -231,7 +231,8 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     return {
                         name: list[xx].name,
                         file: '/jljiuspeed?md5=' + xx + '&name=' + list[xx].name,
-                        preview: list[xx].preview ? await tempUrl(list[xx].preview, list[xx].name) : null,
+                        preview: list[xx].preview ? '/jljiuspeed?notionid=' + list[xx].preview + '&name=' + list[xx].name : null,
+                        // preview: list[xx].preview ? await tempUrl(list[xx].preview, list[xx].name) : null,
                         type: type,
                         size: decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val()),
                         md5: xx,
@@ -281,7 +282,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 status: 200
             })
         }
-        
+
         if (pathname.endsWith('/api/checkmd5')) {
             if (!await ifMD5(data.md5)) {
                 return new Response(JSON.stringify({ exist: false }), {
@@ -370,17 +371,24 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             let uuid = uuid4()
             data.map(async (data: any) => {
                 if (data.type == 'folder') {
-                    if (data.path == '\\') data.path == ''
+                    if (data.path == '/') {
+                        data.path == '\\'
+                    }else{
+                        data.path = data.path.replaceAll('/', `\\`) + '\\' + data.name
+                        cl(data.path)
+                    }
                     await set(ref(db, 'jsave/users/' + user_cookie + '/share/' + uuid + '/' + data.name), {
-                        path: data.path + '\\' + data.name,
+                        path: data.path,
                         name: data.name,
                         type: 'folder',
                         user: data.user,
                         time: data.time
                     })
                 } else {
+                    cl(data.preview)
                     await set(ref(db, 'jsave/users/' + user_cookie + '/share/' + uuid + '/' + data.md5), {
                         md5: data.md5,
+                        preview: data.preview,
                         path: data.path,
                         name: data.name,
                         type: data.type,
@@ -458,6 +466,21 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 let name = decodeURI(searchParams.get('name') as string)
                 let url = (await get(ref(db, 'jsave/files/' + md5 + '/source'))).val()
                 const res = await fetch(await tempUrl(url, name), {
+                    headers: {
+                        'Connection': "keep-alive",
+                        "proxy-connection": "keep-alive",
+                        'Range': req.headers.get('Range') as string
+                    }
+                });
+                return new Response(res.body, {
+                    status: res.status,
+                    headers: res.headers,
+                });
+            }
+            if (searchParams.has('notionid') && searchParams.has('name')) {
+                let notionid = searchParams.get('notionid')
+                let name = decodeURI(searchParams.get('name') as string)
+                const res = await fetch(await tempUrl(notionid, name), {
                     headers: {
                         'Connection': "keep-alive",
                         "proxy-connection": "keep-alive",
