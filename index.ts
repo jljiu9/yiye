@@ -174,7 +174,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         data.path = data.path.replaceAll('/', '\\')
                     }
                     if(list[xx].path== '/' && data.path == '') {
-                        list[xx].path = '\\'+list[xx].name
+                        list[xx].path = '\\\\'+list[xx].name
                         cl(data.name)
                         cl(list[xx].path)
                     }
