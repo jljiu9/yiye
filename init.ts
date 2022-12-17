@@ -38,7 +38,7 @@ let tempUrl = async (url: string, name: string) => {
         table: 'block',
         name: name,
         id: notionInfo.id,
-        download: true,
+        download: false,
         spaceId: notionInfo.spaceId,
         userId: notionInfo.userId,
         cache: 'v2'
