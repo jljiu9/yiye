@@ -122,11 +122,11 @@ serve(async (req: Request, connInfo: ConnInfo) => {
 
         if (pathname == '/api/getUserFiles') {
             cl(pathname)
-            let list: any, user: any
+            let list: any
             if (searchParams.has('usershare') && searchParams.has('ref')) {
-                user = decodeURI(searchParams.get('ref') as string)
+                user_cookie = decodeURI(searchParams.get('ref') as string)
                 let path = decodeURI(searchParams.get('usershare') as string)
-                list = (await get(ref(db, 'jsave/users/' + user + '/share/' + path))).val()
+                list = (await get(ref(db, 'jsave/users/' + user_cookie + '/share/' + path))).val()
                 if (data.path !== '/') {
                     console.log('data.path', data.path)
                     let path: any = ''
@@ -146,7 +146,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         path = path.join('/')
                         path = path + data.path
                     }
-                    list = (await get(ref(db, 'jsave/users/' + user + '/tree' + path))).val()
+                    list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path))).val()
                     if (!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(path)))).val()
                     if (!list) {
                         return new Response(JSON.stringify({ wrong: 0, usershare: true }), {
@@ -178,13 +178,13 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         cl(data.name)
                         cl(list[xx].path)
                     }
-                    let f = (await get(ref(db, 'jsave/users/' + user + '/folders/' + list[xx].path + data.path))).val()
+                    let f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + list[xx].path + data.path))).val()
                     console.log('f', f)
-                    if (!f) f = (await get(ref(db, 'jsave/users/' + user + '/folders/' + encodeURI(list[xx].path) + encodeURI(data.path)))).val()
+                    if (!f) f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + encodeURI(list[xx].path) + encodeURI(data.path)))).val()
                     console.log('f', f)
                     console.log('list[xx].path', list[xx].path)
                     console.log('list[xx]', list[xx])
-                    console.log('path', 'jsave/users/' + user + '/folders/' + list[xx].path + data.path)
+                    console.log('path', 'jsave/users/' + user_cookie + '/folders/' + list[xx].path + data.path)
                     if (f && f.size) {
                         return {
                             name: decodeURI(xx),
@@ -193,9 +193,9 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                             number: f.number
                         }
                     } else {
-                        let folder = await getFolderSize(user, list[xx].path + data.path)
+                        let folder = await getFolderSize(user_cookie, list[xx].path + data.path)
                         console.log('folder', folder)
-                        if (!folder) folder = await getFolderSize(user, encodeURI(list[xx].path) + encodeURI(data.path))
+                        if (!folder) folder = await getFolderSize(user_cookie, encodeURI(list[xx].path) + encodeURI(data.path))
                         console.log('folder', folder)
                         let folderInfo = {
                             name: decodeURI(xx),
@@ -203,7 +203,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                             size: folder.size,
                             number: folder.number
                         }
-                        set(ref(db, 'jsave/users/' + user + '/folders/' + list[xx].path), folderInfo)
+                        set(ref(db, 'jsave/users/' + user_cookie + '/folders/' + list[xx].path), folderInfo)
                         return folderInfo
                     }
                 }
@@ -251,6 +251,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         time: list[xx].time
                     }
                 } else {
+                    cl('问题出现？？')
                     let cc = data.path.replaceAll('/', `\\`)
                     if (cc == '\\') cc = ''
                     let f = (await get(ref(db, 'jsave/users/' + user_cookie + '/folders/' + cc + '\\' + xx))).val()
@@ -263,7 +264,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                             number: f.number
                         }
                     } else {
-                        // cl('没有计算过文件大小！')
+                        cl('没有计算过文件大小！')
                         let folder = await getFolderSize(user_cookie, decodeURI(data.path) + '/' + decodeURI(xx))
                         if (!folder) folder = await getFolderSize(user_cookie, encodeURI(decodeURI(data.path)) + '/' + encodeURI(decodeURI(xx)))
                         let folderInfo = {
