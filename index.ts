@@ -144,8 +144,10 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         path = path.split('/')
                         path.pop()
                         path = path.join('/')
+                        cl(path)
                         path = path + data.path
                     }
+                    cl(path)
                     list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path))).val()
                     if (!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(path)))).val()
                     if (!list) {
