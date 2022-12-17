@@ -134,12 +134,14 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         if (list[xx].type == 'folder') {
                             if (list[xx].path.endsWith((data.path).replaceAll('/', '\\'))) {
                                 path = list[xx].path
+                                cl('pathaaaa:'+path)
                             }
                         }
                     })
                     if (path == '\\') {
                         path = data.path
                     } else {
+                        cl('pathttt:'+path)
                         path = path.replaceAll('\\', '/')
                         path = path.split('/')
                         path.pop()
