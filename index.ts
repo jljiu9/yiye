@@ -136,6 +136,10 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                                 path = list[xx].path
                                 cl('pathaaaa:'+path)
                             }
+                            if (data.path.replaceAll('/', '\\').startsWith(list[xx].name)) {
+                                path = list[xx].path
+                                cl('pathaaaa:'+path)
+                            }
                         }
                     })
                     if (path == '\\') {
