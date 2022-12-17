@@ -146,8 +146,10 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         path = path.join('/')
                         cl(path)
                         path = path + data.path
+                        // 
+                        data.path = path
                     }
-                    cl(path)
+                    console.log('data.pathhhh',data.path)
                     list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path))).val()
                     if (!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(path)))).val()
                     if (!list) {
