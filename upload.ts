@@ -1,16 +1,7 @@
 // deno-lint-ignore-file
-import { notionInfo,cl,formatFileSize } from "./init.ts";
+import { notionInfo,cl,formatFileSize, postRtnJson } from "./init.ts";
 
 let upload =async (file: { name: string; type: string; size: number },writeDB:any) => {
-    let postRtnJson = async (url: RequestInfo, body: any, header: any) => {
-        const response = await fetch(url, {
-            method: 'post',
-            body: JSON.stringify(body),
-            headers: header,
-        });
-        let json = await response.json();
-        return json
-    }
     let info:any = await postRtnJson('https://www.notion.so/api/v3/getUploadFileUrl', {
         "bucket": "secure",
         "name": file.name,

@@ -1,7 +1,9 @@
 // deno-lint-ignore-file
 import { serve, ConnInfo } from "https://deno.land/std@0.155.0/http/server.ts"
 import { ref, child, get, set } from "https://esm.sh/firebase@9.14.0/database"
+import { addbthash } from "./addbthash.ts";
 import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize } from "./init.ts";
+import { pikpak } from "./pikpak.ts";
 import { db } from "./updateDB.ts";
 import { upload } from "./upload.ts";
 
@@ -134,18 +136,18 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         if (list[xx].type == 'folder') {
                             if (list[xx].path.endsWith((data.path).replaceAll('/', '\\'))) {
                                 path = list[xx].path
-                                cl('pathaaaa:'+path)
+                                cl('pathaaaa:' + path)
                             }
-                            if (data.path.replaceAll('/', '\\').startsWith('\\'+list[xx].name)) {
+                            if (data.path.replaceAll('/', '\\').startsWith('\\' + list[xx].name)) {
                                 path = list[xx].path
-                                cl('pathaaaa:'+path)
+                                cl('pathaaaa:' + path)
                             }
                         }
                     })
                     if (path == '\\') {
                         path = data.path
                     } else {
-                        cl('pathttt:'+path)
+                        cl('pathttt:' + path)
                         path = path.replaceAll('\\', '/')
                         path = path.split('/')
                         path.pop()
@@ -155,7 +157,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         // 
                         data.path = path
                     }
-                    console.log('data.pathhhh',data.path)
+                    console.log('data.pathhhh', data.path)
                     list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path))).val()
                     if (!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(path)))).val()
                     if (!list) {
@@ -165,6 +167,19 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     }
                 }
             } else {
+                let btlist = await get(ref(db, 'jsave/users/' + user_cookie + '/btlist'))
+                if (btlist.exists()) {
+                    let path = Object.keys(btlist.val()).find(x => {
+                        data.path.startsWith(x.replaceAll('\\', '/'))
+                    })
+                    if (path !== undefined) {
+                        let btpath = data.path.replaceAll('/', '\\').replace(path, '')
+                        list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path?.replaceAll('\\', '/')))).val()
+                        return new Response(JSON.stringify(list[btpath]), {
+                            status: 200
+                        })
+                    }
+                }
                 list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + data.path))).val()
                 if (!list) list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree/' + encodeURI(data.path)))).val()
                 if (!list) {
@@ -176,6 +191,14 @@ serve(async (req: Request, connInfo: ConnInfo) => {
 
             let vv = Object.keys(list).map(async (xx) => {
                 let url = (await get(ref(db, 'jsave/files/' + xx + '/source'))).val()
+                if (list[xx].type == 'btfolder') {
+                    return {
+                        name: list[xx].btname,
+                        number:0,
+                        type: 'folder',
+                        size: list[xx].btsize,
+                    }
+                }
                 if (list[xx].type == 'folder') {
                     cl('分享的文件夹')
                     if (data.path == '/') {
@@ -183,8 +206,8 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     } else {
                         data.path = data.path.replaceAll('/', '\\')
                     }
-                    if(list[xx].path== '/' && data.path == '') {
-                        list[xx].path = '\\'+list[xx].name
+                    if (list[xx].path == '/' && data.path == '') {
+                        list[xx].path = '\\' + list[xx].name
                         cl(data.name)
                         cl(list[xx].path)
                     }
@@ -243,17 +266,17 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     } else {
                         type = mm
                     }
-                    if ( list[xx].preview) {
-                        if (!list[xx].preview.includes('/jljiuspeed?notionid=')){
+                    if (list[xx].preview) {
+                        if (!list[xx].preview.includes('/jljiuspeed?notionid=')) {
                             list[xx].preview = '/jljiuspeed?notionid=' + list[xx].preview + '&name=' + list[xx].name
                         }
-                    }else{
-                        list[xx].preview  = null
+                    } else {
+                        list[xx].preview = null
                     }
                     return {
                         name: list[xx].name,
                         file: '/jljiuspeed?md5=' + xx + '&name=' + list[xx].name,
-                        preview: list[xx].preview ,
+                        preview: list[xx].preview,
                         // preview: list[xx].preview ? await tempUrl(list[xx].preview, list[xx].name) : null,
                         type: type,
                         size: decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val()),
@@ -378,6 +401,19 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 }
             })
         }
+        if (pathname.endsWith('/api/setbthash')) {
+            let bt = await addbthash(data.bthash)
+            // let bt = (await get(ref(db, 'jsave/bt/hashlist/' + data.bthash + '/path2id'))).val()
+            await set(ref(db, 'jsave/users/' + user_cookie + '/tree' + data.path + '/' + bt.pathname), bt)
+            await set(ref(db, 'jsave/users/' + user_cookie + '/btlist/' + (data.path + '/' + bt.pathname).replaceAll('/', '\\')), 0)
+            return new Response(JSON.stringify({ setbt: true }), {
+                status: 200,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': '*',
+                }
+            })
+        }
         if (pathname.endsWith('/api/setlove')) {
             await set(ref(db, 'jsave/users/' + user_cookie + '/love/' + data.md5), {
                 path: data.path,
@@ -401,7 +437,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         // data.path = '\\'
                         cl('zhuxxxxx')
                         cl(data.path)
-                    }else{
+                    } else {
                         data.path = data.path.replaceAll('/', `\\`) + '\\' + data.name
                         cl(data.path)
                     }
@@ -492,14 +528,75 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             if (searchParams.has('md5') && searchParams.has('name')) {
                 let md5 = searchParams.get('md5')
                 let name = decodeURI(searchParams.get('name') as string)
-                let url = (await get(ref(db, 'jsave/files/' + md5 + '/source'))).val()
-                const res = await fetch(await tempUrl(url, name), {
+                let url = (await get(ref(db, 'jsave/files/' + md5))).val()
+                if (url.temp) {
+                    const res = await fetch(url.temp, {
+                        headers: {
+                            'Connection': "keep-alive",
+                            "proxy-connection": "keep-alive",
+                            'Range': req.headers.get('Range') as string
+                        }
+                    });
+                    if (res.status == 206) {
+                        return new Response(res.body, {
+                            status: res.status,
+                            headers: res.headers,
+                        });
+                    } else {
+                        let temp = await tempUrl(url.source, name)
+                        await set(ref(db, 'jsave/files/' + md5 + '/temp'), temp)
+                        const res = await fetch(temp, {
+                            headers: {
+                                'Connection': "keep-alive",
+                                "proxy-connection": "keep-alive",
+                                'Range': req.headers.get('Range') as string
+                            }
+                        });
+                        return new Response(res.body, {
+                            status: res.status,
+                            headers: res.headers,
+                        });
+                    }
+                } else {
+                    let temp = await tempUrl(url.source, name)
+                    await set(ref(db, 'jsave/files/' + md5 + '/temp'), temp)
+                    const res = await fetch(temp, {
+                        headers: {
+                            'Connection': "keep-alive",
+                            "proxy-connection": "keep-alive",
+                            'Range': req.headers.get('Range') as string
+                        }
+                    });
+                    return new Response(res.body, {
+                        status: res.status,
+                        headers: res.headers,
+                    });
+                }
+            }
+            if (searchParams.has('bthash') && searchParams.has('btid') && searchParams.has('btue')) { //btue:useremail
+                let bthash = searchParams.get('bthsah')
+                let btid = searchParams.get('btid')
+                let btue = searchParams.get('btue')
+                let temp = (await get(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path' + btid + '/file'))).val()
+                let res = await fetch(temp, {
                     headers: {
                         'Connection': "keep-alive",
                         "proxy-connection": "keep-alive",
                         'Range': req.headers.get('Range') as string
                     }
                 });
+                if (res.status !== 206) {
+
+                    let pk = await pikpak.refresh(await pikpak(btue as string))
+                    let url = (await pikpak.getFileInfo(pk, btid as string)).links["application/octet-stream"].url
+                    res = await fetch(url, {
+                        headers: {
+                            'Connection': "keep-alive",
+                            "proxy-connection": "keep-alive",
+                            'Range': req.headers.get('Range') as string
+                        }
+                    });
+                }
                 return new Response(res.body, {
                     status: res.status,
                     headers: res.headers,
@@ -508,7 +605,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             if (searchParams.has('notionid') && searchParams.has('name')) {
                 let notionid = searchParams.get('notionid')
                 let name = decodeURI(searchParams.get('name') as string)
-                const res = await fetch(await tempUrl(notionid, name), {
+                const res = await fetch(await tempUrl(notionid as string, name), {
                     headers: {
                         'Connection': "keep-alive",
                         "proxy-connection": "keep-alive",

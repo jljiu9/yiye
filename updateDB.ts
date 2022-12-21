@@ -5,17 +5,17 @@ import { cl, getFolderSize } from "./init.ts";
 const db = DB("https://xxxx-c0c6b-default-rtdb.asia-southeast1.firebasedatabase.app")
 
 let update = async () => {
-    let user_cookie = 'jljiu'
-    let data = {
-        path: '/中文路径/测试'
-    }
-    cl(await getFolderSize('jljiu',data.path))
+    // let user_cookie = 'jljiu'
+    // let data = {
+    //     path: '/中文路径/测试'
+    // }
+    // cl(await getFolderSize('jljiu',data.path))
     // let bb = data.path.replaceAll('/', `\\`)
     // cl(bb)
     // let path = 'jsave/users/' + user_cookie + '/folders/' + bb
     // cl(path)
-    // let users = (await get(ref(db, path))).val()
-    // cl(users)
+    let users = (await get(ref(db, 'jsave/bt/hashlist'))).val()
+    cl(users)
     // Object.keys(users).map(user => {
     //     let folders = users[user]['folders']
     //     if (folders) {

@@ -19,6 +19,21 @@ const cl = (x: any): any => {
     console.log(x)
     return x
 }
+let wait = (ms:number) => new Promise((s) => setTimeout(s, ms))
+let getRtnJson = async (url: RequestInfo, header?: any) => {
+    const response = await fetch(url, { headers: header });
+    let json = await response.json();
+    return json
+}
+let postRtnJson = async (url: RequestInfo, body: any, header?: any) => {
+    const response = await fetch(url, {
+        method: 'post',
+        body: JSON.stringify(body),
+        headers: header,
+    });
+    let json = await response.json();
+    return json
+}
 let getRtnRedirect = async (url: RequestInfo, header?: any): Promise<any> => {
     const res = await fetch(url, {
         method: 'get',
@@ -91,4 +106,4 @@ let getFolderSize =async (user_cookie:string,path:string) => {
     return info
 }
 
-export { cl, mime, uuid4, tempUrl, notionInfo, formatFileSize, unFormatFileSize ,getFolderSize}
+export {postRtnJson,getRtnJson,wait, cl, mime, uuid4, tempUrl, notionInfo, formatFileSize, unFormatFileSize ,getFolderSize}
