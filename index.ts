@@ -603,12 +603,32 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         "sec-ch-ua": "\"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"108\", \"Google Chrome\";v=\"108\"",
                         "sec-ch-ua-mobile": "?0",
                         "sec-ch-ua-platform": "\"Windows\"",
-                        "sec-fetch-dest": "video",
+                        // "sec-fetch-dest": "video",
                         "sec-fetch-mode": "no-cors",
-                        "sec-fetch-site": "cross-site",
+                        // "sec-fetch-site": "cross-site",
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
                     }
                 });
                 
+                // fetch("https://dl-a10b-0481.mypikpak.com/download/?fid=NTfYXs4c44oD2feMdm3xycRxUy0yBWWmcbs5xBOovFJaNINSDQK7ThLxz4GPu4guboLTfwqaFVrsuMilDsM-YGDoZzT-vUu_tJ2oJhKlEDU=&from=5&verno=3&prod=1104&expire=1671727600&g=DF1511436289BA13FCDB40F1B471D19A8729B672&ui=Y5_GrHVDeRpygkN4&t=0&ms=6291456&th=0&f=710215962&alt=0&fileid=VNJp4IPclE_90teTSVce--7Ko1&userid=Y5_GrHVDeRpygkN4&pr=XQPkPvr9WWiIuMvELmrVehDap28pKOUfpI5SK7YX8J2_PF10mT-4koSldi11qZGSEMK49arPMb4MqdYjabwyY9CRjUh4D2o31P48IZxk-2idVTe5gzu4AK_zJZ27r5H_TY2JwcnzP4tumM3KfsHHHgSwMTUQMLY7hNudRkJ0P4r-io5a4RXlr5x9Jc9EATwCwBItL6HGyHZM58dJSEX3u2JoRwUh8Z3qiyCuMmbwNf38fHBZcrzbOTXVhSmnrK0CmAt0s8WJL4JXY6rog634NCRoXEGvnB__Nil6G6yOTVddjQHlhSv-g8Te0KBfYOYuDqzI-_5dAERKzOK5S9fJ2Y1Nca03hDHRk3BFcm5ti1ZUT_Q5nYg2HIF4fIqoh0IBk9IGef0NWBN0W85DfJ-I_tMj5dvIUUJG754GQSW9wM0=&sign=0A95A827FC6E5F993591FEE951B6F849", {
+                //     "headers": {
+                //         "accept": "*/*",
+                //         "accept-language": "zh-CN,zh;q=0.9",
+                //         "cache-control": "no-cache",
+                //         "pragma": "no-cache",
+                //         "range": "bytes=1474560-",
+                //         "sec-ch-ua": "\"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"108\", \"Google Chrome\";v=\"108\"",
+                //         "sec-ch-ua-mobile": "?0",
+                //         "sec-ch-ua-platform": "\"Windows\"",
+                //         "sec-fetch-dest": "video",
+                //         "sec-fetch-mode": "no-cors",
+                //         "sec-fetch-site": "cross-site",
+                //         "Referer": "https://jljiu9-yiye-bt.deno.dev/",
+                //         "Referrer-Policy": "strict-origin-when-cross-origin"
+                //     },
+                //     "body": null,
+                //     "method": "GET"
+                // });
                 cl(res.headers)
                 if (res.status !== 206) {
                     // let email = btue?.replaceAll('-email-','@' ).replaceAll('-dot-', '.')
