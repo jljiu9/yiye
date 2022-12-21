@@ -50,6 +50,7 @@ let addbthash = async (bt: string, refresh?: boolean) => {
                 x.kind = x.mime_type.split('/')[0]
                 bthash.id2path[x.id] = {
                     name: x.name,
+                    thumb: x.thumbnail_link,
                     file: (await pikpak.getFileInfo(pk, x.id)).links["application/octet-stream"].url
                 }
                 x.file = '/jljiuspeed?bthash=' + hash + '&btid=' + x.id + '&btue=' + pk.username.replaceAll('@', '-email-').replaceAll('.', '-dot-')
@@ -59,7 +60,7 @@ let addbthash = async (bt: string, refresh?: boolean) => {
                 size: formatFileSize(x.size),
                 type: x.kind,
                 number: 0,
-                preview: x.thumbnail_link,
+                preview:'/jljiuspeed?bthash=' + hash + '&btid=' + x.id+'&btpreview=',
                 id: x.id,
                 file: x.file,
                 user: x.user,

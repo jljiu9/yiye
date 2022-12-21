@@ -178,6 +178,11 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         cl("btpath:"+btpath)
                         list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path?.replaceAll('\\', '/')))).val()
                         cl(list[btpath])
+                        if (!list[btpath]) {
+                            return new Response(JSON.stringify(list['\\']), {
+                                status: 200
+                            })
+                        }
                         return new Response(JSON.stringify(list[btpath]), {
                             status: 200
                         })
@@ -589,9 +594,9 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     }
                 });
                 if (res.status !== 206) {
-
                     let pk = await pikpak.refresh(await pikpak(btue as string))
                     let url = (await pikpak.getFileInfo(pk, btid as string)).links["application/octet-stream"].url
+                    await set(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path' + btid + '/file'),url)
                     res = await fetch(url, {
                         headers: {
                             'Connection': "keep-alive",
@@ -600,6 +605,22 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         }
                     });
                 }
+                return new Response(res.body, {
+                    status: res.status,
+                    headers: res.headers,
+                });
+            }
+            if (searchParams.has('bthash') && searchParams.has('btid') && searchParams.has('btpreview')) { //btue:useremail
+                let bthash = searchParams.get('bthsah')
+                let btid = searchParams.get('btid')
+                let thumb = (await get(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path' + btid + '/thumb'))).val()
+                let res = await fetch(thumb, {
+                    headers: {
+                        'Connection': "keep-alive",
+                        "proxy-connection": "keep-alive",
+                        'Range': req.headers.get('Range') as string
+                    }
+                });
                 return new Response(res.body, {
                     status: res.status,
                     headers: res.headers,
