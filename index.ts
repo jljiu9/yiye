@@ -172,10 +172,12 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     let path = Object.keys(btlist.val()).find(x => {
                         return data.path.startsWith(x.replaceAll('\\', '/'))
                     })
-                    cl(path)
+                    cl("path:"+path)
                     if (path !== undefined) {
                         let btpath = data.path.replaceAll('/', '\\').replace(path, '')
+                        cl("btpath:"+btpath)
                         list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path?.replaceAll('\\', '/')))).val()
+                        cl(list[btpath])
                         return new Response(JSON.stringify(list[btpath]), {
                             status: 200
                         })
@@ -191,7 +193,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             }
 
             let vv = Object.keys(list).map(async (xx) => {
-                let url = (await get(ref(db, 'jsave/files/' + xx + '/source'))).val()
+                // let url = (await get(ref(db, 'jsave/files/' + xx + '/source'))).val()
                 if (list[xx].type == 'btfolder') {
                     return {
                         name: list[xx].btname,
