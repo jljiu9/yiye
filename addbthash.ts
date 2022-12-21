@@ -3,7 +3,7 @@ import { pikpak } from "./pikpak.ts";
 import { ref, child, get, set } from "https://esm.sh/firebase@9.14.0/database"
 import { db } from "./updateDB.ts";
 
-let bt = "magnet:?xt=urn:btih:6b94fe38ba4dfc669dedaae45e766b359685215d&tr=http%3a%2f%2ft.nyaatracker.com%2fannounce&tr=http%3a%2f%2ftracker.kamigami.org%3a2710%2fannounce&tr=http%3a%2f%2fshare.camoe.cn%3a8080%2fannounce&tr=http%3a%2f%2fopentracker.acgnx.se%2fannounce&tr=http%3a%2f%2fanidex.moe%3a6969%2fannounce&tr=http%3a%2f%2ft.acg.rip%3a6699%2fannounce&tr=https%3a%2f%2ftr.bangumi.moe%3a9696%2fannounce&tr=udp%3a%2f%2ftr.bangumi.moe%3a6969%2fannounce&tr=http%3a%2f%2fopen.acgtracker.com%3a1096%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce"
+// let bt = "magnet:?xt=urn:btih:6b94fe38ba4dfc669dedaae45e766b359685215d&tr=http%3a%2f%2ft.nyaatracker.com%2fannounce&tr=http%3a%2f%2ftracker.kamigami.org%3a2710%2fannounce&tr=http%3a%2f%2fshare.camoe.cn%3a8080%2fannounce&tr=http%3a%2f%2fopentracker.acgnx.se%2fannounce&tr=http%3a%2f%2fanidex.moe%3a6969%2fannounce&tr=http%3a%2f%2ft.acg.rip%3a6699%2fannounce&tr=https%3a%2f%2ftr.bangumi.moe%3a9696%2fannounce&tr=udp%3a%2f%2ftr.bangumi.moe%3a6969%2fannounce&tr=http%3a%2f%2fopen.acgtracker.com%3a1096%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce"
 // let bt = "magnet:?xt=urn:btih:BE63BF0F2B1686248DC5D33DF1C620F23E54CFF1"
 // let bt = "magnet:?xt=urn:btih:c5885441b3d35dc23450eb22fc7ed803645d72fe"
 let addbthash = async (bt: string, refresh?: boolean) => {
@@ -92,6 +92,6 @@ let addbthash = async (bt: string, refresh?: boolean) => {
     cl('成功获取磁力信息:'+hash)
     return bthash.path2id
 }
-addbthash(bt)
+// addbthash(bt)
 
 export { addbthash}

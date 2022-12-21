@@ -170,8 +170,9 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 let btlist = await get(ref(db, 'jsave/users/' + user_cookie + '/btlist'))
                 if (btlist.exists()) {
                     let path = Object.keys(btlist.val()).find(x => {
-                        data.path.startsWith(x.replaceAll('\\', '/'))
+                        return data.path.startsWith(x.replaceAll('\\', '/'))
                     })
+                    cl(path)
                     if (path !== undefined) {
                         let btpath = data.path.replaceAll('/', '\\').replace(path, '')
                         list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path?.replaceAll('\\', '/')))).val()
