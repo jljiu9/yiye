@@ -585,8 +585,10 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 let bthash = searchParams.get('bthsah')
                 let btid = searchParams.get('btid')
                 let btue = searchParams.get('btue')
-                let temp = (await get(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path' + btid + '/file'))).val()
-                cl(temp)
+                let temp = (await get(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'))).val()
+                cl('temp:'+temp)
+                cl(bthash)
+                cl(btid)
                 let res = await fetch(temp, {
                     headers: {
                         'Connection': "keep-alive",
@@ -598,7 +600,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     let pk = await pikpak.refresh(await pikpak(btue?.replaceAll('-email-','@' ).replaceAll('-dot-', '.') as string))
                     let url = (await pikpak.getFileInfo(pk, btid as string)).links["application/octet-stream"].url
                     cl(url)
-                    await set(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path' + btid + '/file'),url)
+                    await set(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'),url)
                     res = await fetch(url, {
                         headers: {
                             'Connection': "keep-alive",
@@ -615,7 +617,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             if (searchParams.has('bthash') && searchParams.has('btid') && searchParams.has('btpreview')) { //btue:useremail
                 let bthash = searchParams.get('bthsah')
                 let btid = searchParams.get('btid')
-                let thumb = (await get(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path' + btid + '/thumb'))).val()
+                let thumb = (await get(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/thumb'))).val()
                 let res = await fetch(thumb, {
                     headers: {
                         'Connection': "keep-alive",
