@@ -601,6 +601,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         "accept-language": "zh-CN,zh;q=0.9",
                         // // "if-range": "\"A6BF16C7D42822E506C018EC5C983C35\"",
                         // // "range": "bytes=1101824-1101824",
+                        "etag": "fdfdfsdfdsfdfgdg",
                         "sec-ch-ua": "\"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"108\", \"Google Chrome\";v=\"108\"",
                         "sec-ch-ua-mobile": "?0",
                         "sec-ch-ua-platform": "\"Windows\"",
