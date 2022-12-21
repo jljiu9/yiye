@@ -172,10 +172,10 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     let path = Object.keys(btlist.val()).find(x => {
                         return data.path.startsWith(x.replaceAll('\\', '/'))
                     })
-                    cl("path:"+path)
+                    cl("path:" + path)
                     if (path !== undefined) {
-                        let btpath = '\\'+ btlist.val()[path] + data.path.replaceAll('/', '\\').replace(path, '')
-                        cl("btpath:"+btpath)
+                        let btpath = '\\' + btlist.val()[path] + data.path.replaceAll('/', '\\').replace(path, '')
+                        cl("btpath:" + btpath)
                         list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path?.replaceAll('\\', '/')))).val()
                         cl(list[btpath])
                         if (!list[btpath]) {
@@ -202,7 +202,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 if (list[xx].type == 'btfolder') {
                     return {
                         name: list[xx].btname,
-                        number:0,
+                        number: 0,
                         type: 'folder',
                         size: list[xx].btsize,
                     }
@@ -586,7 +586,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 let btid = searchParams.get('btid')
                 let btue = searchParams.get('btue')
                 let temp = (await get(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'))).val()
-                cl('temp:'+temp)
+                cl('temp:' + temp)
                 cl(bthash)
                 cl(btid)
                 let res = await fetch(temp, {
@@ -594,7 +594,19 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         'Connection': "keep-alive",
                         "proxy-connection": "keep-alive",
                         'Range': req.headers.get('Range') as string,
-                        'Cookie':'deviceid=wdi10.e15ba01f870d48ac85d7745f440abaccxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; xl_fp_rt=1671441312032; allow_analysis=true; _gid=GA1.2.1303771502.1671507363; PPA_CI=c423a5a63e0c5b3323c6173d2e7ad52d; _ga=GA1.2.1619007689.1671507358; _ga_0318ZPR14J=GS1.1.1671620692.7.1.1671620787.0.0.0'
+                        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+                        "accept-language": "zh-CN,zh;q=0.9",
+                        "if-range": "\"A6BF16C7D42822E506C018EC5C983C35\"",
+                        // "range": "bytes=1101824-1101824",
+                        "sec-ch-ua": "\"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"108\", \"Google Chrome\";v=\"108\"",
+                        "sec-ch-ua-mobile": "?0",
+                        "sec-ch-ua-platform": "\"Windows\"",
+                        "sec-fetch-dest": "document",
+                        "sec-fetch-mode": "navigate",
+                        "sec-fetch-site": "none",
+                        "sec-fetch-user": "?1",
+                        "upgrade-insecure-requests": "1",
+                        "cookie": "deviceid=wdi10.e15ba01f870d48ac85d7745f440abaccxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; xl_fp_rt=1671441312032; allow_analysis=true; _gid=GA1.2.1303771502.1671507363; PPA_CI=c423a5a63e0c5b3323c6173d2e7ad52d; _ga=GA1.2.1619007689.1671507358; _ga_0318ZPR14J=GS1.1.1671620692.7.1.1671620787.0.0.0"
                     }
                 });
                 if (res.status !== 206) {
@@ -603,13 +615,13 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     let pk = await pikpak.refresh(await pikpak(btue as string))
                     let url = (await pikpak.getFileInfo(pk, btid as string)).links["application/octet-stream"].url
                     cl(url)
-                    await set(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'),url)
+                    await set(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'), url)
                     res = await fetch(url, {
                         headers: {
                             'Connection': "keep-alive",
                             "proxy-connection": "keep-alive",
                             'Range': req.headers.get('Range') as string,
-                            'Cookie':'deviceid=wdi10.e15ba01f870d48ac85d7745f440abaccxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; xl_fp_rt=1671441312032; allow_analysis=true; _gid=GA1.2.1303771502.1671507363; PPA_CI=c423a5a63e0c5b3323c6173d2e7ad52d; _ga=GA1.2.1619007689.1671507358; _ga_0318ZPR14J=GS1.1.1671620692.7.1.1671620787.0.0.0'
+                            'Cookie': 'deviceid=wdi10.e15ba01f870d48ac85d7745f440abaccxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; xl_fp_rt=1671441312032; allow_analysis=true; _gid=GA1.2.1303771502.1671507363; PPA_CI=c423a5a63e0c5b3323c6173d2e7ad52d; _ga=GA1.2.1619007689.1671507358; _ga_0318ZPR14J=GS1.1.1671620692.7.1.1671620787.0.0.0'
                         }
                     });
                 }
