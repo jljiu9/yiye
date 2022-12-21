@@ -582,7 +582,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 }
             }
             if (searchParams.has('bthash') && searchParams.has('btid') && searchParams.has('btue')) { //btue:useremail
-                let bthash = searchParams.get('bthsah')
+                let bthash = searchParams.get('bthash')
                 let btid = searchParams.get('btid')
                 let btue = searchParams.get('btue')
                 let temp = (await get(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'))).val()
