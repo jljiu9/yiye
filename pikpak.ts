@@ -240,7 +240,7 @@ pikpak.refresh = async (pk: any) => {
         pk.access_token = token.token_type + ' ' + token.access_token
         pk.refresh_token = token.refresh_token
         await set(ref(db, 'jsave/bt/users/' + pk.username.replaceAll('@', '-email-').replaceAll('.', '-dot-')), pk)
-        await set(ref(db, 'jsave/bt/users/current'), pk)
+        // await set(ref(db, 'jsave/bt/users/current'), pk)
     }
     return pk
 }
