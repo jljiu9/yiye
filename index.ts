@@ -174,7 +174,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     })
                     cl("path:"+path)
                     if (path !== undefined) {
-                        let btpath = data.path.replaceAll('/', '\\').replace(path, '')
+                        let btpath = btlist.val()[path] + data.path.replaceAll('/', '\\').replace(path, '')
                         cl("btpath:"+btpath)
                         list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path?.replaceAll('\\', '/')))).val()
                         cl(list[btpath])
@@ -408,7 +408,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             let bt = await addbthash(data.bthash)
             // let bt = (await get(ref(db, 'jsave/bt/hashlist/' + data.bthash + '/path2id'))).val()
             await set(ref(db, 'jsave/users/' + user_cookie + '/tree' + data.path + '/' + bt.pathname), bt)
-            await set(ref(db, 'jsave/users/' + user_cookie + '/btlist/' + (data.path + '/' + bt.pathname).replaceAll('/', '\\')), 0)
+            await set(ref(db, 'jsave/users/' + user_cookie + '/btlist/' + (data.path + '/' + bt.pathname).replaceAll('/', '\\')), bt.pathname)
             return new Response(JSON.stringify({ setbt: true }), {
                 status: 200,
                 headers: {
