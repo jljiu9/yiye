@@ -596,7 +596,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         'Range': req.headers.get('Range') as string,
                         "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
                         "accept-language": "zh-CN,zh;q=0.9",
-                        "if-range": "\"A6BF16C7D42822E506C018EC5C983C35\"",
+                        // "if-range": "\"A6BF16C7D42822E506C018EC5C983C35\"",
                         // "range": "bytes=1101824-1101824",
                         "sec-ch-ua": "\"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"108\", \"Google Chrome\";v=\"108\"",
                         "sec-ch-ua-mobile": "?0",
