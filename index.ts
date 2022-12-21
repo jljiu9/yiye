@@ -596,23 +596,19 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         'Connection': "keep-alive",
                         "proxy-connection": "keep-alive",
                         'Range': req.headers.get('Range') as string,
-                        'If-Range':req.headers.get('If-Range') as string,
-                        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+                        "accept": "*/*",
                         "accept-language": "zh-CN,zh;q=0.9",
-                        // // "if-range": "\"A6BF16C7D42822E506C018EC5C983C35\"",
-                        // // "range": "bytes=1101824-1101824",
-                        "etag": "fdfdfsdfdsfdfgdg",
+                        "cache-control": "no-cache",
+                        "pragma": "no-cache",
                         "sec-ch-ua": "\"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"108\", \"Google Chrome\";v=\"108\"",
                         "sec-ch-ua-mobile": "?0",
                         "sec-ch-ua-platform": "\"Windows\"",
-                        "sec-fetch-dest": "document",
-                        "sec-fetch-mode": "navigate",
-                        "sec-fetch-site": "none",
-                        "sec-fetch-user": "?1",
-                        "upgrade-insecure-requests": "1",
-                        "cookie": "deviceid=wdi10.e15ba01f870d48ac85d7745f440abaccxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; xl_fp_rt=1671441312032; allow_analysis=true; _gid=GA1.2.1303771502.1671507363; PPA_CI=c423a5a63e0c5b3323c6173d2e7ad52d; _ga=GA1.2.1619007689.1671507358; _ga_0318ZPR14J=GS1.1.1671620692.7.1.1671620787.0.0.0"
+                        "sec-fetch-dest": "video",
+                        "sec-fetch-mode": "no-cors",
+                        "sec-fetch-site": "cross-site",
                     }
                 });
+                
                 cl(res.headers)
                 if (res.status !== 206) {
                     // let email = btue?.replaceAll('-email-','@' ).replaceAll('-dot-', '.')
@@ -625,7 +621,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         headers: {
                             'Connection': "keep-alive",
                             "proxy-connection": "keep-alive",
-                            'If-Range':req.headers.get('If-Range') as string,
+                            'If-Range': req.headers.get('If-Range') as string,
                             'Range': req.headers.get('Range') as string,
                             'Cookie': 'deviceid=wdi10.e15ba01f870d48ac85d7745f440abaccxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; xl_fp_rt=1671441312032; allow_analysis=true; _gid=GA1.2.1303771502.1671507363; PPA_CI=c423a5a63e0c5b3323c6173d2e7ad52d; _ga=GA1.2.1619007689.1671507358; _ga_0318ZPR14J=GS1.1.1671620692.7.1.1671620787.0.0.0'
                         }
