@@ -174,7 +174,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     })
                     cl("path:"+path)
                     if (path !== undefined) {
-                        let btpath = btlist.val()[path] + data.path.replaceAll('/', '\\').replace(path, '')
+                        let btpath = '\\'+ btlist.val()[path] + data.path.replaceAll('/', '\\').replace(path, '')
                         cl("btpath:"+btpath)
                         list = (await get(ref(db, 'jsave/users/' + user_cookie + '/tree' + path?.replaceAll('\\', '/')))).val()
                         cl(list[btpath])
