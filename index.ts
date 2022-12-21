@@ -589,6 +589,8 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 cl('temp:' + temp)
                 cl(bthash)
                 cl(btid)
+                cl(req.headers.get('Range'))
+                cl(req.headers.get('If-Range'))
                 let res = await fetch(temp, {
                     headers: {
                         'Connection': "keep-alive",
