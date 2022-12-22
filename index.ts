@@ -586,6 +586,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 let btid = searchParams.get('btid')
                 let btue = searchParams.get('btue')
                 let temp = (await get(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'))).val()
+                return Response.redirect(temp)
                 cl('temp:' + temp)
                 cl(req.headers.get('Range'))
                 // let {} = new URL(temp)
@@ -605,18 +606,18 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     // "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
                 }
                 let range
-                // if (req.headers.get('Range')) {
-                //     range = req.headers.get('Range')
-                //     cl("range:" + range)
-                //     headers['Range'] = range
-                // }
+                if (req.headers.get('Range')) {
+                    range = req.headers.get('Range')
+                    cl("range:" + range)
+                    headers['Range'] = range
+                }
                 //  else {
                 //     range = 'bytes=0-'
                 // }
                 // cl(range)
                 cl(headers)
                 let res = await fetch(temp, {
-                    // headers: headers
+                    headers: headers
                 });
                 cl(res.headers)
                 cl(res.status)
