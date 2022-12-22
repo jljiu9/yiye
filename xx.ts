@@ -11,6 +11,7 @@ let doit = async () => {
 
     cl(await pikpak.me(pk))
     // cl(await pikpak.getFileInfo('VNJ_Gx-FnLT1LZXvrngT6uGCo1'))
+    cl(await pikpak.getFileInfo(pk,'VNJoekhsI09OcjA6cfMAF54jo1'))
     // cl(await pikpak.download('VNJ_Gx-FnLT1LZXvrngT6uGCo1'))
 
     // cl(await pikpak.newFolder(await pikpak.refresh(await pikpak('')),(new Date()).getTime().toString()))

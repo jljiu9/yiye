@@ -619,18 +619,18 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 // let res = await fetch(temp, {
                 //     headers: headers
                 // });
-                if (res.status !== 206) {
-                    if (res.status == 200) {
-                        return new Response(res.body, {
-                            status: res.status,
-                            headers: res.headers,
-                        });
-                    }
-                    // let email = btue?.replaceAll('-email-','@' ).replaceAll('-dot-', '.')
-                    // cl(email)
+                // if (res.status !== 206) {
+                //     if (res.status == 200) {
+                //         return new Response(res.body, {
+                //             status: res.status,
+                //             headers: res.headers,
+                //         });
+                //     }
+                //     // let email = btue?.replaceAll('-email-','@' ).replaceAll('-dot-', '.')
+                //     // cl(email)
 
 
-                }
+                // }
                 let pk = await pikpak(btue as string)
                 // cl(pk)
                 pk = await pikpak.refresh(pk)
@@ -651,7 +651,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                         "pragma": "no-cache",
                         // 'Connection': "keep-alive",
                         // "proxy-connection": "keep-alive",
-                        'Range': req.headers.get('Range') as string,
+                        // 'Range': req.headers.get('Range') as string,
                         'Cookie': 'deviceid=wdi10.e15ba01f870d48ac85d7745f440abaccxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; xl_fp_rt=1671441312032; allow_analysis=true; _gid=GA1.2.1303771502.1671507363; PPA_CI=c423a5a63e0c5b3323c6173d2e7ad52d; _ga=GA1.2.1619007689.1671507358; _ga_0318ZPR14J=GS1.1.1671620692.7.1.1671620787.0.0.0'
                     }
                 });
