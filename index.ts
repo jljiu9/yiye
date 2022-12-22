@@ -597,12 +597,13 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 } else {
                     range = '0-'
                 }
+                cl(range)
                 let res = await fetch(temp, {
                     headers: {
                         'Connection': "keep-alive",
                         // 'Content-Type': 'application/octet-stream',
                         "proxy-connection": "keep-alive",
-                        'Range': range as string,
+                        // 'Range': range as string,
                         "accept": "*/*",
                         "accept-language": "zh-CN,zh;q=0.9",
                         "cache-control": "no-cache",
@@ -630,7 +631,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                             "pragma": "no-cache",
                             'Connection': "keep-alive",
                             "proxy-connection": "keep-alive",
-                            'Range': range as string,
+                            // 'Range': range as string,
                             'Cookie': 'deviceid=wdi10.e15ba01f870d48ac85d7745f440abaccxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; xl_fp_rt=1671441312032; allow_analysis=true; _gid=GA1.2.1303771502.1671507363; PPA_CI=c423a5a63e0c5b3323c6173d2e7ad52d; _ga=GA1.2.1619007689.1671507358; _ga_0318ZPR14J=GS1.1.1671620692.7.1.1671620787.0.0.0'
                         }
                     });
