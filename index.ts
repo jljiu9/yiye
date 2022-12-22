@@ -634,7 +634,14 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 let pk = await pikpak(btue as string)
                 // cl(pk)
                 pk = await pikpak.refresh(pk)
-                let url = (await pikpak.getFileInfo(pk, btid as string)).links["application/octet-stream"].url
+                let xxxx = (await pikpak.getFileInfo(pk, btid as string))
+                let url
+                if (xxxx.medias) {
+                    url = xxxx.medias[0].link.url
+                    cl('视频！')
+                } else {
+                    url = xxxx.links["application/octet-stream"].url
+                }
                 cl(url)
                 return Response.redirect(url)
                 // await set(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'), url)

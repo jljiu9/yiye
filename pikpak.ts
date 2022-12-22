@@ -81,7 +81,7 @@ pikpak.meta = (pk: any) => {
 }
 pikpak.getFileInfo = async (pk: any, fileID: string) => {
     let token = await pikpak.init_files(pk)
-    let res = await getRtnJson(`https://api-drive.mypikpak.com/drive/v1/files/${fileID}?usage=FETCH`, pikpak.cookie(pk, token));
+    let res = await getRtnJson(`https://api-drive.mypikpak.com/drive/v1/files/${fileID}?`, pikpak.cookie(pk, token));
     return res
 }
 pikpak.me = async (pk: any) => {
