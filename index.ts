@@ -600,6 +600,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 let res = await fetch(temp, {
                     headers: {
                         'Connection': "keep-alive",
+                        'Content-Type': 'application/octet-stream',
                         "proxy-connection": "keep-alive",
                         'Range': range as string,
                         "accept": "*/*",
