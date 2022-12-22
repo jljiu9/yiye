@@ -603,7 +603,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 if (req.headers.get('Range')) {
                     range = req.headers.get('Range')
                 } else {
-                    range = 'bytes=0-100'
+                    range = 'bytes=0-'
                 }
                 cl(range)
                 headers['Range'] = range
