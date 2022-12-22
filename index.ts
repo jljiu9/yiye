@@ -581,7 +581,6 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     });
                 }
             }
-
             if (searchParams.has('bthash') && searchParams.has('btid') && searchParams.has('btue')) { //btue:useremail
                 let bthash = searchParams.get('bthash')
                 let btid = searchParams.get('btid')
@@ -620,18 +619,18 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 // let res = await fetch(temp, {
                 //     headers: headers
                 // });
-                // if (res.status !== 206) {
-                //     if (res.status == 200) {
-                //         return new Response(res.body, {
-                //             status: res.status,
-                //             headers: res.headers,
-                //         });
-                //     }
-                //     // let email = btue?.replaceAll('-email-','@' ).replaceAll('-dot-', '.')
-                //     // cl(email)
+                if (res.status !== 206) {
+                    if (res.status == 200) {
+                        return new Response(res.body, {
+                            status: res.status,
+                            headers: res.headers,
+                        });
+                    }
+                    // let email = btue?.replaceAll('-email-','@' ).replaceAll('-dot-', '.')
+                    // cl(email)
 
 
-                // }
+                }
                 let pk = await pikpak(btue as string)
                 // cl(pk)
                 pk = await pikpak.refresh(pk)
@@ -663,7 +662,6 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     headers: res.headers,
                 });
             }
-
             if (searchParams.has('bthash') && searchParams.has('btid') && searchParams.has('btpreview')) { //btue:useremail
                 let bthash = searchParams.get('bthsah')
                 let btid = searchParams.get('btid')

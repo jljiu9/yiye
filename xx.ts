@@ -84,3 +84,40 @@ doit()
 //         headers: res.headers,
 //     });
 // }
+
+
+// if (searchParams.has('bthash') && searchParams.has('btid') && searchParams.has('btue')) { //btue:useremail
+//     let bthash = searchParams.get('bthash')
+//     let btid = searchParams.get('btid')
+//     let btue = searchParams.get('btue')
+//     let pk = await pikpak(btue as string)
+//     // cl(pk)
+//     pk = await pikpak.refresh(pk)
+//     let xxxx = (await pikpak.getFileInfo(pk, btid as string))
+//     let url
+//     if (xxxx.medias) {
+//         url = xxxx.medias[0].link.url
+//         cl('视频！')
+//     } else {
+//         url = xxxx.links["application/octet-stream"].url
+//     }
+//     cl(url)
+//     // return Response.redirect(url)
+//     // await set(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'), url)
+//     let res = await fetch(url, {
+//         headers: {
+//             "cache-control": "no-cache",
+//             "pragma": "no-cache",
+//             // 'Connection': "keep-alive",
+//             // "proxy-connection": "keep-alive",
+//             'Range': req.headers.get('Range') as string,
+//             'Cookie': 'deviceid=wdi10.e15ba01f870d48ac85d7745f440abaccxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; xl_fp_rt=1671441312032; allow_analysis=true; _gid=GA1.2.1303771502.1671507363; PPA_CI=c423a5a63e0c5b3323c6173d2e7ad52d; _ga=GA1.2.1619007689.1671507358; _ga_0318ZPR14J=GS1.1.1671620692.7.1.1671620787.0.0.0'
+//         }
+//     });
+//     cl(res.headers)
+//     cl(res.status)
+//     return new Response(res.body, {
+//         status: res.status,
+//         headers: res.headers,
+//     });
+// }
