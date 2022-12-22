@@ -616,7 +616,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 // cl(range)
                 cl(headers)
                 let res = await fetch(temp, {
-                    headers: headers
+                    // headers: headers
                 });
                 cl(res.headers)
                 cl(res.status)
