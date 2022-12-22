@@ -602,11 +602,13 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 let range
                 if (req.headers.get('Range')) {
                     range = req.headers.get('Range')
-                } else {
-                    range = 'bytes=0-'
+                    headers['Range'] = range
                 }
-                cl(range)
-                headers['Range'] = range
+                //  else {
+                //     range = 'bytes=0-'
+                // }
+                // cl(range)
+                
                 let res = await fetch(temp, {
                     headers: headers
                 });
