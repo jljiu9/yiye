@@ -608,7 +608,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 //     range = 'bytes=0-'
                 // }
                 // cl(range)
-                
+                cl(headers)
                 let res = await fetch(temp, {
                     headers: headers
                 });
@@ -623,7 +623,9 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     }
                     // let email = btue?.replaceAll('-email-','@' ).replaceAll('-dot-', '.')
                     // cl(email)
-                    let pk = await pikpak.refresh(await pikpak(btue as string))
+                    let pk = await pikpak(btue as string)
+                    cl(pk)
+                    pk = await pikpak.refresh(pk)
                     let url = (await pikpak.getFileInfo(pk, btid as string)).links["application/octet-stream"].url
                     cl(url)
                     await set(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'), url)
