@@ -616,7 +616,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     }
                     cl(url)
                     // return Response.redirect(url)
-                    // await set(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'), url)
+                    await set(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'), url)
                     res = await fetch(url, {
                         headers: {
                             "cache-control": "no-cache",
