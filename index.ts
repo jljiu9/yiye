@@ -590,7 +590,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 cl(req.headers.get('Range'))
                 // let {} = new URL(temp)
                 let headers: any = {
-                    'Connection': "keep-alive",
+                    // 'Connection': "keep-alive",
                     // 'Content-Type': 'application/octet-stream',
                     // "proxy-connection": "keep-alive",
                     // 'Range': range as string,
