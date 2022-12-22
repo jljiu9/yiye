@@ -594,6 +594,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 let res = await fetch(temp, {
                     headers: {
                         'Connection': "keep-alive",
+                        'Content-Type': 'application/octet-stream',
                         "proxy-connection": "keep-alive",
                         'Range': req.headers.get('Range') as string,
                         "accept": "*/*",
