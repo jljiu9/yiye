@@ -619,6 +619,12 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 cl(res.headers)
                 cl(res.status)
                 if (res.status !== 206) {
+                    if (res.status == 200) { 
+                        return new Response(res.body, {
+                            status: res.status,
+                            headers: res.headers,
+                        });
+                    }
                     // let email = btue?.replaceAll('-email-','@' ).replaceAll('-dot-', '.')
                     // cl(email)
                     let pk = await pikpak.refresh(await pikpak(btue as string))
