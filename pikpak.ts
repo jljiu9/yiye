@@ -81,7 +81,7 @@ pikpak.meta = (pk: any) => {
 }
 pikpak.getFileInfo = async (pk: any, fileID: string) => {
     let token = await pikpak.init_files(pk)
-    let res = await getRtnJson(`https://api-drive.mypikpak.com/drive/v1/files/${fileID}?usage=FETCH`, pikpak.cookie(pk,token));
+    let res = await getRtnJson(`https://api-drive.mypikpak.com/drive/v1/files/${fileID}?usage=FETCH`, pikpak.cookie(pk, token));
     return res
 }
 pikpak.me = async (pk: any) => {
@@ -95,11 +95,11 @@ pikpak.getFolderList = async (pk: any, folderID: string) => {
         pikpak.cookie(pk, token));
     return res
 }
-pikpak.bt = async (pk: any, bt: string,parent?:string) => {
+pikpak.bt = async (pk: any, bt: string, parent?: string) => {
     let token = await pikpak.init_post_files(pk)
     let res = await postRtnJson("https://api-drive.mypikpak.com/drive/v1/files", {
         "kind": "drive#file",
-        "parent_id": parent?parent:'',
+        "parent_id": parent ? parent : '',
         "upload_type": "UPLOAD_TYPE_URL",
         "url": { "url": bt }
     }, pikpak.cookie(pk, token))
@@ -217,6 +217,7 @@ pikpak.login = async (pk: any, username: string, password: string) => {
         "password": password,
         "client_id": pk.client_id
     }, { "x-captcha-token": captcha_token })
+    cl(token)
     pk.captcha_token = captcha_token
     pk.access_token = token.token_type + ' ' + token.access_token
     pk.refresh_token = token.refresh_token
@@ -225,6 +226,7 @@ pikpak.login = async (pk: any, username: string, password: string) => {
     pk.user_id = (await pikpak.me(pk)).sub
     await set(ref(db, 'jsave/bt/users/' + pk.username.replaceAll('@', '-email-').replaceAll('.', '-dot-')), pk)
     await set(ref(db, 'jsave/bt/users/current'), pk)
+    return pk
 }
 
 /**
@@ -236,12 +238,18 @@ pikpak.refresh = async (pk: any) => {
         "grant_type": "refresh_token",
         "refresh_token": pk.refresh_token
     })
-    if (token) {
-        pk.access_token = token.token_type + ' ' + token.access_token
-        pk.refresh_token = token.refresh_token
-        await set(ref(db, 'jsave/bt/users/' + pk.username.replaceAll('@', '-email-').replaceAll('.', '-dot-')), pk)
-        // await set(ref(db, 'jsave/bt/users/current'), pk)
+    if (!token.refresh_token) {
+        pk = await pikpak.login(pk, pk.username, pk.password)
+        token = await postRtnJson("https://user.mypikpak.com/v1/auth/token", {
+            "client_id": pk.client_id,
+            "grant_type": "refresh_token",
+            "refresh_token": pk.refresh_token
+        })
     }
+    pk.access_token = token.token_type + ' ' + token.access_token
+    pk.refresh_token = token.refresh_token
+    await set(ref(db, 'jsave/bt/users/' + pk.username.replaceAll('@', '-email-').replaceAll('.', '-dot-')), pk)
+    await set(ref(db, 'jsave/bt/users/current'), pk)
     return pk
 }
 
