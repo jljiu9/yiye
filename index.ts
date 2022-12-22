@@ -601,9 +601,9 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 }
                 let range
                 if (req.headers.get('Range')) {
-                    range = req.headers.get('Range')
+                    // range = req.headers.get('Range')
                 } else {
-                    range = '0-'
+                    range = '0-100'
                 }
                 cl(range)
                 headers['Range'] = range
