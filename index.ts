@@ -588,7 +588,8 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 let temp = (await get(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'))).val()
                 cl('temp:' + temp)
                 cl(req.headers.get('Range'))
-                let headers:any = {
+                // let {} = new URL(temp)
+                let headers: any = {
                     'Connection': "keep-alive",
                     // 'Content-Type': 'application/octet-stream',
                     // "proxy-connection": "keep-alive",
@@ -596,13 +597,16 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     // "accept": "*/*",
                     // "cache-control": "no-cache",
                     // "pragma": "no-cache",
+                    "Host": "dl-a10b-0481.mypikpak.com",
+                    "sec-ch-ua-platform": "Windows",
+                    "Sec-Fetch-Dest": "video",
                     'Cookie': 'deviceid=wdi10.e15ba01f870d48ac85d7745f440abaccxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; xl_fp_rt=1671441312032; allow_analysis=true; _gid=GA1.2.1303771502.1671507363; PPA_CI=c423a5a63e0c5b3323c6173d2e7ad52d; _ga=GA1.2.1619007689.1671507358; _ga_0318ZPR14J=GS1.1.1671620692.7.1.1671620787.0.0.0',
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
                 }
                 let range
                 if (req.headers.get('Range')) {
                     range = req.headers.get('Range')
-                    cl("range:"+range)
+                    cl("range:" + range)
                     headers['Range'] = range
                 }
                 //  else {
@@ -616,7 +620,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 cl(res.headers)
                 cl(res.status)
                 if (res.status !== 206) {
-                    if (res.status == 200) { 
+                    if (res.status == 200) {
                         return new Response(res.body, {
                             status: res.status,
                             headers: res.headers,
