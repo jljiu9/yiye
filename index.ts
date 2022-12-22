@@ -587,10 +587,18 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 let btue = searchParams.get('btue')
                 let temp = (await get(ref(db, 'jsave/bt/hashlist/' + bthash + '/id2path/' + btid + '/file'))).val()
                 cl('temp:' + temp)
-                cl(bthash)
-                cl(btid)
                 cl(req.headers.get('Range'))
-                cl(req.headers.get('If-Range'))
+                let headers:any = {
+                    'Connection': "keep-alive",
+                    // 'Content-Type': 'application/octet-stream',
+                    "proxy-connection": "keep-alive",
+                    // 'Range': range as string,
+                    "accept": "*/*",
+                    "cache-control": "no-cache",
+                    "pragma": "no-cache",
+                    'Cookie': 'deviceid=wdi10.e15ba01f870d48ac85d7745f440abaccxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; xl_fp_rt=1671441312032; allow_analysis=true; _gid=GA1.2.1303771502.1671507363; PPA_CI=c423a5a63e0c5b3323c6173d2e7ad52d; _ga=GA1.2.1619007689.1671507358; _ga_0318ZPR14J=GS1.1.1671620692.7.1.1671620787.0.0.0',
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
+                }
                 let range
                 if (req.headers.get('Range')) {
                     range = req.headers.get('Range')
@@ -598,22 +606,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     range = '0-'
                 }
                 cl(range)
-                let headers = {
-                    'Connection': "keep-alive",
-                    // 'Content-Type': 'application/octet-stream',
-                    "proxy-connection": "keep-alive",
-                    // 'Range': range as string,
-                    "accept": "*/*",
-                    // "accept-language": "zh-CN,zh;q=0.9",
-                    "cache-control": "no-cache",
-                    "pragma": "no-cache",
-                    // "sec-ch-ua": "\"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"108\", \"Google Chrome\";v=\"108\"",
-                    // "sec-ch-ua-mobile": "?0",
-                    // "sec-ch-ua-platform": "\"Windows\"",
-                    // "sec-fetch-mode": "no-cors",
-                    'Cookie': 'deviceid=wdi10.e15ba01f870d48ac85d7745f440abaccxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx; xl_fp_rt=1671441312032; allow_analysis=true; _gid=GA1.2.1303771502.1671507363; PPA_CI=c423a5a63e0c5b3323c6173d2e7ad52d; _ga=GA1.2.1619007689.1671507358; _ga_0318ZPR14J=GS1.1.1671620692.7.1.1671620787.0.0.0',
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
-                }
+                headers['Range'] = range
                 let res = await fetch(temp, {
                     headers: headers
                 });
