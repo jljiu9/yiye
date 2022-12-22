@@ -600,7 +600,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                 let res = await fetch(temp, {
                     headers: {
                         'Connection': "keep-alive",
-                        'Content-Type': 'application/octet-stream',
+                        // 'Content-Type': 'application/octet-stream',
                         "proxy-connection": "keep-alive",
                         'Range': range as string,
                         "accept": "*/*",
@@ -616,6 +616,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     }
                 });
                 cl(res.headers)
+                cl(res.status)
                 if (res.status !== 206) {
                     // let email = btue?.replaceAll('-email-','@' ).replaceAll('-dot-', '.')
                     // cl(email)
