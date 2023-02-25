@@ -505,6 +505,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     headers: res.headers,
                 });
             }
+            
             if (searchParams.has('notionid') && searchParams.has('name')) {
                 let notionid = searchParams.get('notionid')
                 let name = decodeURI(searchParams.get('name') as string)
