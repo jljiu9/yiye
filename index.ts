@@ -508,7 +508,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             if (searchParams.has('notionid') && searchParams.has('name')) {
                 let notionid = searchParams.get('notionid')
                 let name = decodeURI(searchParams.get('name') as string)
-                const res = await fetch(await tempUrl(notionid, name), {
+                const res = await fetch(await tempUrl(notionid as string, name), {
                     headers: {
                         'Connection': "keep-alive",
                         "proxy-connection": "keep-alive",
