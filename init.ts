@@ -44,9 +44,10 @@ let tempUrl = async (url: string, name: string) => {
         userId: notionInfo.userId,
         cache: 'v2'
     }, xx)
-    return await getRtnRedirect(xx.href, {
+    let temp = await getRtnRedirect(xx.href, {
         "cookie": notionInfo.cookie
     })
+    return cl(temp)
 }
 const formatFileSize = function (bytes: number) {
     const sufixes = ['B', 'kB', 'MB', 'GB', 'TB'];
