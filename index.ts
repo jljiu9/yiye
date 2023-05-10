@@ -1,7 +1,7 @@
 // deno-lint-ignore-file
 import { serve, ConnInfo } from "https://deno.land/std@0.155.0/http/server.ts"
 import { ref, child, get, set } from "https://esm.sh/firebase@9.14.0/database"
-import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize } from "./init.ts";
+import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize, notionInfo } from "./init.ts";
 import { db } from "./updateDB.ts";
 import { upload } from "./upload.ts";
 
@@ -513,6 +513,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     headers: {
                         'Connection': "keep-alive",
                         "proxy-connection": "keep-alive",
+                        "Cookie":notionInfo.cookie,
                         'Range': req.headers.get('Range') as string
                     }
                 });
