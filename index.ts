@@ -513,7 +513,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     headers: {
                         'Connection': "keep-alive",
                         "proxy-connection": "keep-alive",
-                        "Cookie":notionInfo.cookie,
+                        "Cookie":notionInfo.downloadCookie,
                         'Range': req.headers.get('Range') as string
                     }
                 });
