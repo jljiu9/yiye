@@ -1,6 +1,6 @@
 // deno-lint-ignore-file
 import { serve, ConnInfo } from "https://deno.land/std@0.155.0/http/server.ts"
-import { ref, child, get, set } from "https://esm.sh/firebase@9.14.0/database"
+import { ref, child, get, set } from "https://cdn.skypack.dev/firebase@9.14.0/database"
 import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize, notionInfo } from "./init.ts";
 import { db } from "./updateDB.ts";
 import { upload } from "./upload.ts";
@@ -11,6 +11,7 @@ let writeDB = (path: string, file: object) => {
 }
 let ifUser = async (user: string) => {
     let snapshot = await get(child(ref(db), 'jsave/users/' + user))
+    cl('wrong!')
     return snapshot.exists()
 }
 let ifMD5 = async (md5: string) => {
