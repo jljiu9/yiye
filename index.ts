@@ -87,25 +87,30 @@ serve(async (req: Request, connInfo: ConnInfo) => {
         }
         if (pathname == '/api/login') {
             cl('登入')
-            if (data.name && data.passward) {
-                if (await ifUser(data.name)) {
-                    let pws = (await get(ref(db, 'jsave/users/' + data.name + '/passward'))).val()
-                    let email = (await get(ref(db, 'jsave/users/' + data.name + '/email'))).val()
-                    if (pws == data.passward) {
-                        return new Response(JSON.stringify({
-                            name: data.name,
-                            email: email
-                        }), {
-                            status: 200,
-                            headers: {
-                                'Set-Cookie': 'uname=' + encodeURI(data.name),
-                                'Access-Control-Allow-Origin': '*',
-                                'Access-Control-Allow-Headers': '*',
-                            }
-                        })
+            try{
+                if (data.name && data.passward) {
+                    if (await ifUser(data.name)) {
+                        let pws = (await get(ref(db, 'jsave/users/' + data.name + '/passward'))).val()
+                        let email = (await get(ref(db, 'jsave/users/' + data.name + '/email'))).val()
+                        if (pws == data.passward) {
+                            return new Response(JSON.stringify({
+                                name: data.name,
+                                email: email
+                            }), {
+                                status: 200,
+                                headers: {
+                                    'Set-Cookie': 'uname=' + encodeURI(data.name),
+                                    'Access-Control-Allow-Origin': '*',
+                                    'Access-Control-Allow-Headers': '*',
+                                }
+                            })
+                        }
                     }
                 }
+            }catch(e){
+                cl(e)
             }
+            
             return new Response('wrong！', {
                 status: 500, headers: {
                     'Access-Control-Allow-Origin': '*',
