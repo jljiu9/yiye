@@ -1,8 +1,8 @@
 // deno-lint-ignore-file
 import { serve, ConnInfo } from "https://deno.land/std@0.155.0/http/server.ts"
-import { ref, child, get, set } from "https://cdn.skypack.dev/firebase@9.14.0/database"
-import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize, notionInfo } from "./init.ts";
-import { db } from "./updateDB.ts";
+import { ref, child, get, set } from "https://esm.sh/firebase@9.14.0/database"
+import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize, notionInfo,db } from "./init.ts";
+// import { db } from "./updateDB.ts";
 import { upload } from "./upload.ts";
 
 // 复用函数
@@ -39,12 +39,12 @@ serve(async (req: Request, connInfo: ConnInfo) => {
     console.log(`访问者ip: ${ip}`)
     let { pathname, searchParams } = new URL(req.url)
     let user_cookie: any
-    // cl(pathname)
+    cl(pathname)
 
     if (req.method == 'POST') {
-
+        cl('post!!')
         let data = JSON.parse(await req.text())
-        // cl(data)
+        cl(data)
         if (pathname == '/api/resign') {
             if (data.name && data.passward && data.email) {
                 let email
