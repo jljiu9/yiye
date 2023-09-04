@@ -1,7 +1,6 @@
 // deno-lint-ignore-file
 import { mime } from "https://deno.land/x/mimetypes@v1.0.0/mod.ts";
 import { v4 as uuid4 } from 'https://esm.sh/uuid@9.0.0'
-import { db as DB } from "https://deno.land/x/jljiu/mod.ts";
 import { ref, child, get, set } from "https://esm.sh/firebase/database"
 import { db } from "./updateDB.ts";
 let notionInfo = {
