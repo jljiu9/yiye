@@ -1,8 +1,8 @@
 // deno-lint-ignore-file
 import { serve, ConnInfo } from "https://deno.land/std@0.155.0/http/server.ts"
 import { ref, child, get, set } from "https://esm.sh/firebase@9.14.0/database"
-import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize, notionInfo } from "./init.ts";
-import { db } from "./updateDB.ts";
+import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize, notionInfo,db } from "./init.ts";
+// import { db } from "./updateDB.ts";
 import { upload } from "./upload.ts";
 
 // 复用函数
