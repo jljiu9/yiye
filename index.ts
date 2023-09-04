@@ -89,7 +89,9 @@ serve(async (req: Request, connInfo: ConnInfo) => {
             cl('登入')
             try{
                 if (data.name && data.passward) {
+                    cl('name@passward')
                     if (await ifUser(data.name)) {
+                        cl('mmmm?')
                         let pws = (await get(ref(db, 'jsave/users/' + data.name + '/passward'))).val()
                         let email = (await get(ref(db, 'jsave/users/' + data.name + '/email'))).val()
                         if (pws == data.passward) {
