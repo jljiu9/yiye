@@ -5,6 +5,30 @@ import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize, notionInfo,d
 // import { db } from "./updateDB.ts";
 import { upload } from "./upload.ts";
 
+function writeUserData() {
+    set(ref(db, 'vv'), {
+      username: 'jljiu',
+      email: 'email',
+      profile_picture: 'imageUrl'
+    });
+    set(ref(db, 'xx'),null);
+  }
+  writeUserData()
+  
+  
+  get(ref(db, 'vv')).then((snapshot) => {
+    if (snapshot.exists()) {
+      console.log(snapshot.val());
+    } else {
+      console.log("No data available");
+    }
+  }).catch((error) => {
+    console.error(error);
+  })
+
+
+
+
 // 复用函数
 let writeDB = (path: string, file: object) => {
     set(ref(db, 'jsave/files/' + path), file)
