@@ -11,6 +11,7 @@ let writeDB = (path: string, file: object) => {
 }
 let ifUser = async (user: string) => {
     let snapshot = await get(child(ref(db), 'jsave/users/' + user))
+    cl('wrong!')
     return snapshot.exists()
 }
 let ifMD5 = async (md5: string) => {
@@ -41,7 +42,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
     cl(pathname)
 
     if (req.method == 'POST') {
-
+        cl('post!!')
         let data = JSON.parse(await req.text())
         cl(data)
         if (pathname == '/api/resign') {
