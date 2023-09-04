@@ -38,12 +38,12 @@ serve(async (req: Request, connInfo: ConnInfo) => {
     console.log(`访问者ip: ${ip}`)
     let { pathname, searchParams } = new URL(req.url)
     let user_cookie: any
-    // cl(pathname)
+    cl(pathname)
 
     if (req.method == 'POST') {
 
         let data = JSON.parse(await req.text())
-        // cl(data)
+        cl(data)
         if (pathname == '/api/resign') {
             if (data.name && data.passward && data.email) {
                 let email
