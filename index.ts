@@ -108,7 +108,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     }
                 }
             }catch(e){
-                cl(e)
+                console.error(e)
             }
             
             return new Response('wrong！', {
