@@ -1,5 +1,5 @@
 // deno-lint-ignore-file
-import { db as DB } from "https://deno.land/x/jljiu@v1.0.01/mod.ts";
+import { db as DB } from "https://deno.land/x/jljiu@yiye3.1/mod.ts";
 import { ref, child, get, set } from "https://esm.sh/firebase@9.14.0/database"
 import { cl, getFolderSize } from "./init.ts";
 const db = DB("https://xxxx-c0c6b-default-rtdb.asia-southeast1.firebasedatabase.app")
