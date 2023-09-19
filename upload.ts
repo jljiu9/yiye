@@ -11,7 +11,7 @@ let upload =async (file: { name: string; type: string; size: number },writeDB:an
         let json = await response.json();
         return json
     }
-    let info:any = await postRtnJson('https://www.notion.so/api/v3/getUploadFileUrl', {
+    let info:any = await postRtnJson('https://uip.deno.dev/?getUploadFileUrl=ff', {
         "bucket": "secure",
         "name": file.name,
         "contentType": file.type,
@@ -27,7 +27,7 @@ let upload =async (file: { name: string; type: string; size: number },writeDB:an
         "notion-audit-log-platform": "web",
         "notion-client-version": "23.12.0.201",
         "x-notion-active-user-header": "db17c83b-afcf-46e4-a5a8-ce99f167c637",
-        "cookie": upcookie,
+        "cookie": notionInfo.uploadCookie,
     })
     cl(info)
     let header:any = {}
@@ -40,7 +40,7 @@ let upload =async (file: { name: string; type: string; size: number },writeDB:an
         get: info.signedGetUrl,
         header: header
     })
-    let fileId = info.url.match(/(?<=secure.notion-static.com\/)[A-Za-z0-9-]+(?!\/)/)[0]
+    let fileId = info.url.match(/[A-Za-z0-9-]{36,}/g)[1]
     let files = {
         "source": [[info.url]],
         "title": [[file.name]],
