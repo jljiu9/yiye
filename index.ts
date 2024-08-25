@@ -1,9 +1,9 @@
 // deno-lint-ignore-file
 import { serve, ConnInfo } from "https://deno.land/std@0.155.0/http/server.ts"
-import { ref, child, get, set } from "https://esm.sh/firebase@9.14.0/database"
-import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize, notionInfo } from "./init.ts";
-import { db } from "./updateDB.ts";
-import { upload } from "./upload.ts";
+import { ref, child, get, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"
+import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize, notionInfo, db, upload } from "./main.ts";
+// import { db } from "./updateDB.ts";
+// import { upload } from "./upload.ts";
 
 // 复用函数
 let writeDB = (path: string, file: object) => {
@@ -226,9 +226,10 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     } else {
                         type = mm
                     }
+                    let url = (await get(ref(db, 'jsave/files/' + xx + '/source'))).val()
                     return {
                         name: list[xx],
-                        file: '/jljiuspeed?md5=' + xx + '&name=' + list[xx],
+                        file: 'https://uip.deno.dev/'+(await tempUrl(url, list[xx])),
                         type: type,
                         size: decodeURI((await get(ref(db, 'jsave/files/' + xx + '/size'))).val()),
                         md5: xx

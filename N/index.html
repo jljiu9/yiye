@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion File Uploader</title>
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('请选择一个文件');
+                return;
+            }
+
+            const fileInfo = {
+                name: file.name,
+                type: file.type,
+                size: file.size
+            };
+
+            try {
+                // 获取上传URL
+                const response = await fetch('/getUploadUrl', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(fileInfo),
+                });
+
+                if (!response.ok) {
+                    throw new Error('获取上传URL失败');
+                }
+
+                const uploadInfo = await response.json();
+                console.log('Upload info:', uploadInfo);
+
+                // 上传文件
+                const uploadResponse = await fetch(uploadInfo.put, {
+                    method: 'PUT',
+                    headers: uploadInfo.header,
+                    body: file
+                });
+
+                if (!uploadResponse.ok) {
+                    throw new Error('文件上传失败');
+                }
+                console.log(await uploadResponse.text())
+                alert('文件上传成功！');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('上传过程中出错: ' + error.message);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Notion File Uploader</h1>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">上传文件</button>
+</body>
+</html>
