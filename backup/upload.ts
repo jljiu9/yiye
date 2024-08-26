@@ -37,7 +37,17 @@ let upload =async (file: { name: string; type: string; size: number },writeDB:an
         get: info.signedGetUrl,
         header: header
     })
-    let fileId = info.url.match(/(?<=secure.notion-static.com\/)[A-Za-z0-9-]+(?!\/)/)[0]
+    // 提取Notion URL中的ID
+    function getFileId(url: string): string {
+        // 匹配所有的UUID格式字符串（32位或36位，可能包含破折号）
+        const matches = url.match(/[a-f0-9-]{32,36}/g);
+        if (matches && matches.length >= 2) {
+            // 返回第二个匹配项，即我们想要的文件ID
+            return matches[1];
+        }
+        throw new Error("无法从URL中提取文件ID");
+    }
+    let fileId = getFileId(info.url)
     let files = {
         "source": [[info.url]],
         "title": [[file.name]],
