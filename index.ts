@@ -1,7 +1,7 @@
-// deno-lint-ignore-file
+// .\deno run --allow-all index.ts
 import { serve, ConnInfo } from "https://deno.land/std@0.155.0/http/server.ts"
 import { ref, child, get, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"
-import { cl, tempUrl, mime, uuid4, unFormatFileSize, getFolderSize, notionInfo, db, upload } from "./main.ts";
+import { cl, tempUrl, mime, uuid4, getFolderSize, notionInfo, db, upload } from "./main.ts";
 
 // 复用函数
 let writeDB = (path: string, file: object) => {
@@ -29,7 +29,10 @@ let readFile = async (path: string) => {
     })
 }
 
-// 服务启动
+/**
+ * 主服务器函数
+ * 处理所有incoming请求并路由到相应的处理函数
+ */
 serve(async (req: Request, connInfo: ConnInfo) => {
     const addr = connInfo.remoteAddr as Deno.NetAddr;
     const ip = addr.hostname;
@@ -496,7 +499,7 @@ serve(async (req: Request, connInfo: ConnInfo) => {
                     headers: {
                         'Connection': "keep-alive",
                         "proxy-connection": "keep-alive",
-                        "Cookie":notionInfo.downloadCookie,
+                        "Cookie":notionInfo.cookie,
                         'Range': req.headers.get('Range') as string
                     }
                 });
